@@ -92,6 +92,11 @@ const ORDERED = [
   ["selfie de chely con salvador con capucha.jpeg", "Selfie con capucha"],
   ["selfie salva y chely bistezando ambos.jpeg", "Ambos bostezando"],
   ["Chely y Slava tomando biberon sonriendo.jpeg", "Biberón y sonrisa"],
+  ["Salva comiendo a los 6 meses.jpeg", "Seis meses descubriendo sabores"],
+  ["Salva de 7 meses con sombrero de grogu star wars.jpeg", "Siete meses, sombrero Grogu y pura ternura"],
+  ["Salva simplemente siendo guapo 7 meses.jpeg", "Siete meses de solo existir y enamorar"],
+  ["Salva y sus primos en el parque 7 meses.jpeg", "Primos y parque con siete meses de vida"],
+  ["Salva con capucha en el coche sonriendo a la camara 7 meses.jpeg", "Capucha, coche y sonrisa para la cámara"],
 ];
 
 const dir = path.join(process.cwd(), "public", "Salvador y Chely");

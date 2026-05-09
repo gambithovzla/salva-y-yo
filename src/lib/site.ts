@@ -154,7 +154,7 @@ export const openWhenLetters: OpenWhenLetter[] = [
     id: "medianoche",
     trigger: "Ábrelo cuando sea medianoche y pienses en nosotros",
     message:
-      "Si el reloj marca tarde y nos tienes en la cabeza: es porque nuestra historia sigue encendida. Imagina una risa suave en la oscuridad y la misma luna mirándonos a todos. También estamos pensando en ti, con cariño que no apaga el reloj.",
+      "Si el reloj marca tarde y nos tienes en la cabeza: es porque nuestra historia sigue encendida. Imagina una risa suave en la oscuridad y la misma luna mirándonos a todos. También estamos pensando en ti, con un cariño que no se apaga.",
   },
   {
     id: "gracias",
@@ -233,4 +233,42 @@ export const doctorThanks: DoctorThanksBlock = {
   ],
   instagramDoctorHandle: "dra.yanaramohtar",
   instagramClinicHandle: "fementidadcentro",
+};
+
+/** Pestaña dedicada (contenido editable). */
+export type TwoMothersContent = {
+  title: string;
+  chely: {
+    photoSrc: string;
+    label: string;
+    quote: string;
+    imageAlt: string;
+  };
+  suegra: {
+    photoSrc: string;
+    label: string;
+    quote: string;
+    imageAlt: string;
+  };
+  closing: string;
+};
+
+export const twoMothersContent: TwoMothersContent = {
+  title: "Dos madres, un mismo amor",
+  chely: {
+    photoSrc:
+      "/Salvador y Chely/Hermosa foto de chely y salva en un cumpleaños.jpeg",
+    label: "Chely",
+    quote: "La mamá que eligió serlo cada día con Salvador.",
+    imageAlt: "Chely con Salvador",
+  },
+  suegra: {
+    photoSrc:
+      "/Salvador y Chely/salva con su abuela y chely en retaurante tanta, su primera salida a restaurant.jpeg",
+    label: "Abuela de Salva",
+    quote: "La mamá que cruzó fronteras para que su hija no estuviera sola.",
+    imageAlt: "Abuela de Salva con Chely y Salvador",
+  },
+  closing:
+    "Salvador tiene la suerte de crecer entre dos mujeres valientes. Una que lo trajo al mundo, y otra que dejó su mundo para cuidarlo.",
 };

@@ -89,4 +89,9 @@ export const galleryItems: GalleryItem[] = [
   { src: "/Salvador y Chely/selfie de chely con salvador con capucha.jpeg", caption: "Selfie con capucha" },
   { src: "/Salvador y Chely/selfie salva y chely bistezando ambos.jpeg", caption: "Ambos bostezando" },
   { src: "/Salvador y Chely/Chely y Slava tomando biberon sonriendo.jpeg", caption: "Biberón y sonrisa" },
+  { src: "/Salvador y Chely/Salva comiendo a los 6 meses.jpeg", caption: "Seis meses descubriendo sabores" },
+  { src: "/Salvador y Chely/Salva de 7 meses con sombrero de grogu star wars.jpeg", caption: "Siete meses, sombrero Grogu y pura ternura" },
+  { src: "/Salvador y Chely/Salva simplemente siendo guapo 7 meses.jpeg", caption: "Siete meses de solo existir y enamorar" },
+  { src: "/Salvador y Chely/Salva y sus primos en el parque 7 meses.jpeg", caption: "Primos y parque con siete meses de vida" },
+  { src: "/Salvador y Chely/Salva con capucha en el coche sonriendo a la camara 7 meses.jpeg", caption: "Capucha, coche y sonrisa para la cámara" },
 ];

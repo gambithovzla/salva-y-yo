@@ -24,14 +24,6 @@ export function OurPlacesSection({ places }: { places: readonly OurPlace[] }) {
       </div>
 
       <OurPlacesMap places={places} />
-
-      <p className="text-center text-xs text-[var(--muted)]">
-        Coordenadas editables en{" "}
-        <code className="rounded bg-[var(--sand)] px-1 py-0.5 text-[var(--ink)]">
-          src/lib/site.ts
-        </code>
-        .
-      </p>
     </section>
   );
 }

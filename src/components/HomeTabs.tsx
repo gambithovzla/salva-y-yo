@@ -8,6 +8,7 @@ import {
   MailOpen,
   MapPin,
   Music2,
+  Sparkles,
   Ticket,
 } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ import {
   doctorThanks,
   openWhenLetters,
   ourPlaces,
+  twoMothersContent,
 } from "@/lib/site";
 import { DoctorThanks } from "@/components/DoctorThanks";
 import { OpenWhenLetters } from "@/components/OpenWhenLetters";
@@ -26,6 +28,7 @@ import { MotherhoodCounter } from "@/components/MotherhoodCounter";
 import { PhotoGallery } from "@/components/PhotoGallery";
 import { LetterSection } from "@/components/LetterSection";
 import { SongSection } from "@/components/SongSection";
+import { TwoMothersSection } from "@/components/TwoMothersSection";
 
 type Letter = {
   title: string;
@@ -42,6 +45,7 @@ type TabId =
   | "cuando"
   | "lugares"
   | "gracias"
+  | "dosmadres"
   | "musica";
 
 const tabs: { id: TabId; label: string; icon: typeof Images }[] = [
@@ -51,6 +55,7 @@ const tabs: { id: TabId; label: string; icon: typeof Images }[] = [
   { id: "cuando", label: "Cuando", icon: MailOpen },
   { id: "lugares", label: "Lugares", icon: MapPin },
   { id: "gracias", label: "Gracias", icon: Heart },
+  { id: "dosmadres", label: "Dos madres", icon: Sparkles },
   { id: "musica", label: "Música", icon: Music2 },
 ];
 
@@ -218,6 +223,20 @@ export function HomeTabs({
             transition={{ duration: 0.25 }}
           >
             <DoctorThanks data={doctorThanks} />
+          </motion.div>
+        ) : null}
+
+        {tab === "dosmadres" ? (
+          <motion.div
+            key="dosmadres"
+            role="tabpanel"
+            id="panel-dosmadres"
+            aria-labelledby="tab-dosmadres"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <TwoMothersSection content={twoMothersContent} />
           </motion.div>
         ) : null}
 

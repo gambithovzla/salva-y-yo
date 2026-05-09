@@ -1,4 +1,5 @@
 import { HomeTabs } from "@/components/HomeTabs";
+import { ScrollFloatDecor } from "@/components/ScrollFloatDecor";
 import { SongPlayerProvider } from "@/components/SongPlayerContext";
 import {
   coupons,
@@ -19,7 +20,9 @@ export default function Home() {
         aria-hidden
       />
 
-      <header className="mx-auto max-w-3xl px-6 pb-8 pt-16 text-center sm:pt-24">
+      <ScrollFloatDecor />
+
+      <header className="relative z-10 mx-auto max-w-3xl px-6 pb-8 pt-16 text-center sm:pt-24">
         <p className="mb-4 text-xs font-medium uppercase tracking-[0.35em] text-[var(--muted)]">
           {siteCopy.heroEyebrow}
         </p>
@@ -32,15 +35,17 @@ export default function Home() {
       </header>
 
       <SongPlayerProvider song={songForSalvador}>
-        <HomeTabs
-          motherhoodStartIso={motherhoodStartIso}
-          galleryItems={galleryItems}
-          coupons={coupons}
-          letter={letter}
-        />
+        <div className="relative z-10">
+          <HomeTabs
+            motherhoodStartIso={motherhoodStartIso}
+            galleryItems={galleryItems}
+            coupons={coupons}
+            letter={letter}
+          />
+        </div>
       </SongPlayerProvider>
 
-      <footer className="border-t border-[var(--sand)] bg-[var(--card)] px-6 py-10 text-center text-xs text-[var(--muted)] backdrop-blur-sm">
+      <footer className="relative z-10 border-t border-[var(--sand)] bg-[var(--card)] px-6 py-10 text-center text-xs text-[var(--muted)] backdrop-blur-sm">
         Hecho con amor para los dos amores de mi vida: mi compañera incondicional y
         mi hijo.
       </footer>
