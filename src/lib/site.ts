@@ -53,7 +53,7 @@ export const letter = {
   paragraphs: [
     "Hoy quiero detenernos un segundo en todo lo que ya has dado: las noches en vela, las risas de Salvador, la calma que inventas cuando el día se complica. Ser mamá no es un título, es una forma de amar con las manos y con el alma.",
     "Gracias por ser el refugio de nuestra familia. Salvador tiene la suerte enorme de tenerte, y yo también.",
-    "Feliz primer Día de la Madre. Te queremos.",
+    "Feliz primer Día de la Madre. Te amamos.",
   ],
   signOff: "Con todo mi cariño,",
   signature: "Salvador & yo",
@@ -196,7 +196,7 @@ export const ourPlaces: OurPlace[] = [
     title: "Nuestro lugar favorito — Isla Margarita (Venezuela)",
     lat: 10.9658,
     lng: -63.8535,
-    photoSrc: "/Salvador y Chely/nuestro lugar favorito, venezuela.jpeg",
+    photoSrc: "/Salvador y Chely/nuestro lugar favorito.jpeg",
     anecdote:
       "Arena, sal y calma: el sitio al que volvemos en la mente cuando queremos felicidad sencilla.",
   },
@@ -217,7 +217,7 @@ export const doctorThanks: DoctorThanksBlock = {
   name: "Dra. Yanara Mohtar",
   blurb:
     "Nos acompañó en el embarazo con una calma que lo cambió todo. Lo indispensable: gracias a su rápida acción y a su profesionalismo, mi hijo nació sano y salvo. Gracias por formar parte de esta historia.",
-  photoSrc: "/Salvador y Chely/salva con la doctora.jpeg",
+  photoSrc: "/Salvador y Chely/Salva con la doctora.jpeg",
   instagramDoctorHandle: "dra.yanaramohtar",
   instagramClinicHandle: "fementidadcentro",
 };

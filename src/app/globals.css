@@ -29,3 +29,29 @@ body {
 ::selection {
   background: color-mix(in srgb, var(--accent) 45%, transparent);
 }
+
+/* Leaflet: los popups deben poder salir del tile sin recorte (no usar overflow:hidden en el contenedor). */
+.leaflet-container.our-places-map-root {
+  font-family: var(--font-sans);
+}
+.leaflet-popup-content {
+  margin: 12px 14px !important;
+  min-width: 0;
+}
+.leaflet-popup-content img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: min(48vh, 280px);
+  object-fit: contain;
+  background: #f5f0e8;
+  border-radius: 10px;
+  margin-top: 8px;
+}
+.leaflet-popup-scrolled .leaflet-popup-content {
+  overflow: visible;
+}
+.leaflet-popup {
+  z-index: 800 !important;
+}

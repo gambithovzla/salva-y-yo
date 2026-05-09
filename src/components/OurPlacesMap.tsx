@@ -72,12 +72,17 @@ export function OurPlacesMap({
         const imgUrl = encodePublicPath(p.photoSrc);
         const marker = L.marker([p.lat, p.lng]).addTo(map);
         marker.bindPopup(
-          `<div style="min-width:220px;max-width:min(92vw,320px)">
+          `<div class="our-place-popup-inner" style="min-width:220px;max-width:min(92vw,340px)">
             <strong style="display:block;margin-bottom:6px;font-size:15px;line-height:1.3">${escapeHtml(p.title)}</strong>
-            <img src="${imgUrl}" alt="" style="display:block;width:100%;height:auto;max-height:min(48vh,280px);object-fit:contain;object-position:center;background:#f5f0e8;border-radius:10px;margin:8px 0" loading="lazy" decoding="async" />
-            <p style="margin:0;font-size:13px;line-height:1.45;color:#333">${escapeHtml(p.anecdote)}</p>
+            <img src="${imgUrl}" alt="" loading="lazy" decoding="async" />
+            <p style="margin:8px 0 0;font-size:13px;line-height:1.45;color:#333">${escapeHtml(p.anecdote)}</p>
           </div>`,
-          { maxWidth: 340, className: "our-place-popup" },
+          {
+            maxWidth: 360,
+            className: "our-place-popup",
+            autoPan: true,
+            autoPanPadding: [48, 48],
+          },
         );
       });
     });
@@ -92,7 +97,7 @@ export function OurPlacesMap({
   return (
     <div
       ref={containerRef}
-      className="z-0 h-[min(420px,58vh)] w-full overflow-hidden rounded-2xl bg-[var(--sand)]/40 ring-1 ring-[var(--sand)] [&_.leaflet-control-attribution]:text-[10px]"
+      className="our-places-map-root z-0 h-[min(420px,58vh)] min-h-[280px] w-full rounded-2xl bg-[var(--sand)]/40 ring-1 ring-[var(--sand)] [&_.leaflet-container]:rounded-2xl [&_.leaflet-control-attribution]:text-[10px]"
       role="presentation"
     />
   );

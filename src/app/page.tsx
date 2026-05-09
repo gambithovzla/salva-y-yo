@@ -13,7 +13,7 @@ export default function Home() {
   const motherhoodStartIso = getMotherhoodStartIso();
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-x-hidden">
       <div
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_#fff,_transparent_55%),radial-gradient(ellipse_at_bottom,_#ebe3d8_0%,_transparent_50%)] opacity-90"
         aria-hidden
