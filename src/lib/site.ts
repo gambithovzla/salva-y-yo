@@ -28,6 +28,22 @@ export type GalleryItem = {
 
 export { galleryItems } from "./gallery-items";
 
+/** Canción en /public (por defecto la que está junto a las fotos). Cambia la ruta o usa NEXT_PUBLIC_SONG_AUDIO_SRC. */
+export type SongForSalvador = {
+  title: string;
+  subtitle: string;
+  /** Ruta bajo /public, ej. /audio/cancion.mp3 */
+  audioSrc: string;
+};
+
+export const songForSalvador: SongForSalvador = {
+  title: "Para Salvador",
+  subtitle: "Una canción que le compuse",
+  audioSrc:
+    process.env.NEXT_PUBLIC_SONG_AUDIO_SRC ??
+    "/Salvador y Chely/cancion de salvador.mpeg",
+};
+
 export const letter = {
   title: "Una carta para ti",
   greeting: "Amor mío,",

@@ -44,7 +44,7 @@ export function GalleryLightbox({
     if (hasNext) onChangeIndex(index + 1);
   }, [hasNext, index, onChangeIndex]);
 
-  /** Izquierda = atrás (prev), derecha = adelante (next). Solo gestos mayormente horizontales. */
+  /** Izquierda = siguiente (next), derecha = anterior (prev), como galerías habituales. Solo gestos mayormente horizontales. */
   const swipeStart = useRef<{ x: number; y: number } | null>(null);
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
@@ -64,8 +64,8 @@ export function GalleryLightbox({
       if (Math.abs(dx) < threshold) return;
       if (Math.abs(dx) < Math.abs(dy) * 1.2) return;
 
-      if (dx < 0) goPrev();
-      else goNext();
+      if (dx < 0) goNext();
+      else goPrev();
     },
     [goPrev, goNext],
   );

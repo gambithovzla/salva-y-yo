@@ -16,7 +16,6 @@ const ORDERED = [
   ["chely embarazada exhbiendo barriga pintada con una bomba como broma.jpeg", "Humor de mamá"],
   ["chey embarazada en ropa vinotinto.jpeg", "Color vinotinto y promesa"],
   ["foto de la barriga embarazada de chely con osito de peluche al lado.jpeg", "Osito esperando a Salvador"],
-  ["Chely y Salva esperando su cita en el ginecologo.jpeg", "Salvador con dos meses: nervios y magia"],
   ["foto de chely agarrando la mano de u esposo justo cuando esta dando a luz.jpeg", "El momento en que todo cambia"],
   ["Nacimiento Salva.jpeg", "El día que llegaste"],
   ["salvador en la incubadora con minutos de nacido.jpeg", "Primeros minutos de vida"],
@@ -45,8 +44,9 @@ const ORDERED = [
   ["salva de semana close up viendo la camara.jpeg", "Ya mirando a la cámara"],
   ["salva de semanas tomanto teta.jpeg", "Semanas de ternura"],
   ["foto de salva de menos de 1 mes, levantando la cabeza por primera vez.jpeg", "Primera vez que levantó la cabeza"],
-  ["foto profesional de salvador celebrando sus 2 meses, tomada por chely.jpeg", "Dos meses: retrato de mamá"],
   ["foto artistica de salvador celbrando su primer mes, hecha por chely.jpeg", "Un mes: foto artística"],
+  ["foto profesional de salvador celebrando sus 2 meses, tomada por chely.jpeg", "Dos meses: retrato de mamá"],
+  ["Chely y Salva esperando su cita en el ginecologo.jpeg", "Salvador con dos meses: nervios y magia"],
   ["salvador de 2 meses serio viendo la camara.jpeg", "Seriedad de modelo"],
   ["Salvador de 2 meses vestido elegante, dormido.jpeg", "Elegancia dormida"],
   ["Salvador de 1 mes con chely cargandolo en su primera invitacion a un cumpleaños.jpeg", "Primera fiesta de cumpleaños"],
@@ -90,12 +90,16 @@ const ORDERED = [
   ["maximo (nuestro perro) chely y salvador acostados en el sofa, salva durmiendo en el pecho de chely.jpeg", "Máximo y la siesta familiar"],
   ["selfie chely y salvador 2.jpeg", "Selfie familiar"],
   ["selfie de chely con salvador con capucha.jpeg", "Selfie con capucha"],
-  ["selfie salva y chely bistezando ambos.jpeg", "Ambos bizteando"],
+  ["selfie salva y chely bistezando ambos.jpeg", "Ambos bostezando"],
   ["Chely y Slava tomando biberon sonriendo.jpeg", "Biberón y sonrisa"],
 ];
 
 const dir = path.join(process.cwd(), "public", "Salvador y Chely");
-const onDisk = new Set(fs.readdirSync(dir));
+const onDisk = new Set(
+  fs
+    .readdirSync(dir)
+    .filter((f) => /\.(jpe?g|png|webp)$/i.test(f)),
+);
 
 const lines = [
   `/**`,
