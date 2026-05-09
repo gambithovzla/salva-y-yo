@@ -1,4 +1,5 @@
 import { HomeTabs } from "@/components/HomeTabs";
+import { SongPlayerProvider } from "@/components/SongPlayerContext";
 import {
   coupons,
   galleryItems,
@@ -30,16 +31,18 @@ export default function Home() {
         </p>
       </header>
 
-      <HomeTabs
-        motherhoodStartIso={motherhoodStartIso}
-        galleryItems={galleryItems}
-        songForSalvador={songForSalvador}
-        coupons={coupons}
-        letter={letter}
-      />
+      <SongPlayerProvider song={songForSalvador}>
+        <HomeTabs
+          motherhoodStartIso={motherhoodStartIso}
+          galleryItems={galleryItems}
+          coupons={coupons}
+          letter={letter}
+        />
+      </SongPlayerProvider>
 
       <footer className="border-t border-[var(--sand)] bg-[var(--card)] px-6 py-10 text-center text-xs text-[var(--muted)] backdrop-blur-sm">
-        Hecho con amor para mamá · Salvador y familia
+        Hecho con amor para los dos amores de mi vida: mi compañera incondicional y
+        mi hijo.
       </footer>
     </div>
   );

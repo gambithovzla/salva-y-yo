@@ -1,9 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Images, Mail, Ticket } from "lucide-react";
+import { Images, Mail, Music2, Ticket } from "lucide-react";
 import { useState } from "react";
-import type { Coupon, GalleryItem, SongForSalvador } from "@/lib/site";
+import type { Coupon, GalleryItem } from "@/lib/site";
 import { LoveCoupons } from "@/components/LoveCoupons";
 import { MotherhoodCounter } from "@/components/MotherhoodCounter";
 import { PhotoGallery } from "@/components/PhotoGallery";
@@ -18,18 +18,18 @@ type Letter = {
   signature: string;
 };
 
-type TabId = "momentos" | "cupones" | "carta";
+type TabId = "momentos" | "cupones" | "carta" | "musica";
 
 const tabs: { id: TabId; label: string; icon: typeof Images }[] = [
   { id: "momentos", label: "Momentos", icon: Images },
   { id: "cupones", label: "Cupones", icon: Ticket },
   { id: "carta", label: "Carta", icon: Mail },
+  { id: "musica", label: "Música", icon: Music2 },
 ];
 
 type HomeTabsProps = {
   motherhoodStartIso: string;
   galleryItems: GalleryItem[];
-  songForSalvador: SongForSalvador;
   coupons: Coupon[];
   letter: Letter;
 };
@@ -37,7 +37,6 @@ type HomeTabsProps = {
 export function HomeTabs({
   motherhoodStartIso,
   galleryItems,
-  songForSalvador,
   coupons,
   letter,
 }: HomeTabsProps) {
@@ -51,7 +50,7 @@ export function HomeTabs({
       >
         <div
           role="tablist"
-          className="flex gap-1 rounded-2xl bg-[var(--card)] p-1.5 shadow-sm ring-1 ring-[var(--sand)] backdrop-blur-md supports-[backdrop-filter]:bg-[var(--card)]/90"
+          className="flex flex-wrap gap-1 rounded-2xl bg-[var(--card)] p-1.5 shadow-sm ring-1 ring-[var(--sand)] backdrop-blur-md supports-[backdrop-filter]:bg-[var(--card)]/90 sm:flex-nowrap"
         >
           {tabs.map(({ id, label, icon: Icon }) => {
             const selected = tab === id;
@@ -64,7 +63,7 @@ export function HomeTabs({
                 aria-controls={`panel-${id}`}
                 id={`tab-${id}`}
                 onClick={() => setTab(id)}
-                className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-3 py-3 text-sm font-medium transition sm:px-4 sm:text-base ${
+                className={`flex min-h-[3rem] min-w-0 flex-1 basis-[calc(50%-0.125rem)] items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-xs font-medium transition sm:basis-auto sm:gap-2 sm:px-4 sm:py-3 sm:text-base ${
                   selected
                     ? "bg-[var(--accent)] text-[var(--accent-ink)] shadow-sm"
                     : "text-[var(--muted)] hover:bg-[var(--sand)]/60 hover:text-[var(--ink)]"
@@ -109,8 +108,6 @@ export function HomeTabs({
               </h2>
               <PhotoGallery items={galleryItems} />
             </section>
-
-            <SongSection song={songForSalvador} />
           </motion.div>
         ) : null}
 
@@ -152,6 +149,20 @@ export function HomeTabs({
             transition={{ duration: 0.25 }}
           >
             <LetterSection letter={letter} />
+          </motion.div>
+        ) : null}
+
+        {tab === "musica" ? (
+          <motion.div
+            key="musica"
+            role="tabpanel"
+            id="panel-musica"
+            aria-labelledby="tab-musica"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <SongSection />
           </motion.div>
         ) : null}
       </div>

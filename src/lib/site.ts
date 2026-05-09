@@ -28,7 +28,10 @@ export type GalleryItem = {
 
 export { galleryItems } from "./gallery-items";
 
-/** Canción en /public (por defecto la que está junto a las fotos). Cambia la ruta o usa NEXT_PUBLIC_SONG_AUDIO_SRC. */
+/**
+ * Canción en /public. Cambia la ruta o usa NEXT_PUBLIC_SONG_AUDIO_SRC.
+ * En iOS/Safari conviene .mp3 o .m4a; la extensión .mpeg a veces no reproduce bien.
+ */
 export type SongForSalvador = {
   title: string;
   subtitle: string;

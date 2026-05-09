@@ -2,62 +2,19 @@
 
 import { motion } from "framer-motion";
 import { Music2, Pause, Play, Volume2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import type { SongForSalvador } from "@/lib/site";
+import { useSongPlayer } from "@/components/SongPlayerContext";
 
-export function SongSection({ song }: { song: SongForSalvador }) {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const src = encodeURI(song.audioSrc);
-
-  const [playing, setPlaying] = useState(false);
-  const [volumePct, setVolumePct] = useState(85);
-  const [needsGesture, setNeedsGesture] = useState(false);
-
-  useEffect(() => {
-    const el = audioRef.current;
-    if (!el) return;
-    el.volume = volumePct / 100;
-  }, [volumePct]);
-
-  useEffect(() => {
-    const el = audioRef.current;
-    if (!el) return;
-    const onPlay = () => setPlaying(true);
-    const onPause = () => setPlaying(false);
-    el.addEventListener("play", onPlay);
-    el.addEventListener("pause", onPause);
-    el.addEventListener("ended", onPause);
-    return () => {
-      el.removeEventListener("play", onPlay);
-      el.removeEventListener("pause", onPause);
-      el.removeEventListener("ended", onPause);
-    };
-  }, []);
-
-  /** Intento de autoplay al cargar (muchas PWA/navegadores lo bloquean hasta un gesto). */
-  useEffect(() => {
-    const el = audioRef.current;
-    if (!el) return;
-    const run = async () => {
-      try {
-        await el.play();
-        setNeedsGesture(false);
-      } catch {
-        setNeedsGesture(true);
-      }
-    };
-    void run();
-  }, []);
-
-  const togglePlay = () => {
-    const el = audioRef.current;
-    if (!el) return;
-    if (el.paused) {
-      void el.play().then(() => setNeedsGesture(false));
-    } else {
-      el.pause();
-    }
-  };
+/** Reproductor; el audio es único (SongPlayerContext). */
+export function SongSection() {
+  const {
+    song,
+    playing,
+    volumePct,
+    needsGesture,
+    loadError,
+    togglePlay,
+    setVolumePct,
+  } = useSongPlayer();
 
   return (
     <section aria-labelledby="song-heading" className="space-y-6">
@@ -73,14 +30,6 @@ export function SongSection({ song }: { song: SongForSalvador }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
       >
-        <audio
-          ref={audioRef}
-          src={src}
-          preload="auto"
-          className="hidden"
-          playsInline
-        />
-
         <div className="mb-5 flex items-start gap-3">
           <Music2
             className="mt-1 h-8 w-8 shrink-0 text-[var(--accent)]"
@@ -98,6 +47,11 @@ export function SongSection({ song }: { song: SongForSalvador }) {
           <p className="mb-4 rounded-xl bg-[var(--sand)]/50 px-4 py-3 text-center text-sm text-[var(--muted)]">
             Pulsa <strong className="text-[var(--ink)]">Reproducir</strong> para
             escuchar: el navegador suele pedir un gesto antes de iniciar el audio.
+          </p>
+        ) : null}
+        {loadError ? (
+          <p className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-center text-sm text-red-800">
+            {loadError}
           </p>
         ) : null}
 
