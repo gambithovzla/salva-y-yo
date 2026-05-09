@@ -11,6 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import type { SongForSalvador } from "@/lib/site";
+import { encodePublicPath } from "@/lib/public-url";
 
 export type SongPlayerContextValue = {
   song: SongForSalvador;
@@ -24,6 +25,26 @@ export type SongPlayerContextValue = {
 
 const SongPlayerContext = createContext<SongPlayerContextValue | null>(null);
 
+function buildAudioCandidates(song: SongForSalvador): string[] {
+  const env =
+    typeof process !== "undefined"
+      ? process.env.NEXT_PUBLIC_SONG_AUDIO_SRC
+      : undefined;
+  const raw = [
+    ...(env ? [env] : []),
+    song.audioSrc,
+    ...(song.audioFallbackSrcs ?? []),
+  ];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const r of raw) {
+    if (!r || seen.has(r)) continue;
+    seen.add(r);
+    out.push(encodePublicPath(r));
+  }
+  return out;
+}
+
 export function SongPlayerProvider({
   song,
   children,
@@ -31,52 +52,68 @@ export function SongPlayerProvider({
   song: SongForSalvador;
   children: ReactNode;
 }) {
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const candidates = useMemo(() => buildAudioCandidates(song), [song]);
+  const [srcIndex, setSrcIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [volumePct, setVolumePctState] = useState(85);
   const [needsGesture, setNeedsGesture] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  const audioSrc = useMemo(() => encodeURI(song.audioSrc), [song.audioSrc]);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const src = candidates[srcIndex] ?? "";
 
   useEffect(() => {
     const el = audioRef.current;
-    if (!el) return;
+    if (!el || !src) return;
     el.volume = volumePct / 100;
-  }, [volumePct]);
+  }, [volumePct, src]);
 
   useEffect(() => {
     const el = audioRef.current;
-    if (!el) return;
+    if (!el || !src) return;
+
+    el.pause();
+    el.src = src;
+    el.load();
+    setLoadError(null);
+
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
-    const onError = () => {
-      setLoadError(
-        "No se pudo cargar el audio. Comprueba la ruta en /public (idealmente .mp3).",
-      );
-    };
     const onLoaded = () => setLoadError(null);
+    const onError = () => {
+      setSrcIndex((i) => {
+        if (i + 1 < candidates.length) {
+          setLoadError(null);
+          return i + 1;
+        }
+        setLoadError(
+          "No se pudo cargar el audio. Coloca el archivo en public/Salvador y Chely/ (recomendado: cancion de salvador.mp3).",
+        );
+        return i;
+      });
+    };
+
     el.addEventListener("play", onPlay);
     el.addEventListener("pause", onPause);
     el.addEventListener("ended", onPause);
-    el.addEventListener("error", onError);
     el.addEventListener("loadeddata", onLoaded);
+    el.addEventListener("error", onError);
+
     return () => {
       el.removeEventListener("play", onPlay);
       el.removeEventListener("pause", onPause);
       el.removeEventListener("ended", onPause);
-      el.removeEventListener("error", onError);
       el.removeEventListener("loadeddata", onLoaded);
+      el.removeEventListener("error", onError);
     };
-  }, []);
+  }, [src, candidates.length]);
 
   /**
-   * Autoplay: intento al montar, de nuevo cuando el audio puede reproducirse,
-   * y una vez al primer gesto en la página (política iOS/Safari y similares).
+   * Autoplay: intento al montar / al cambiar fuente, canplay, y primer gesto.
    */
   useEffect(() => {
     const el = audioRef.current;
-    if (!el) return;
+    if (!el || !src) return;
 
     const tryPlay = async () => {
       try {
@@ -104,7 +141,7 @@ export function SongPlayerProvider({
       el.removeEventListener("canplay", onCanPlay);
       document.removeEventListener("pointerdown", onFirstGesture, true);
     };
-  }, []);
+  }, [src]);
 
   const setVolumePct = useCallback((n: number) => {
     setVolumePctState(Math.max(0, Math.min(100, n)));
@@ -149,7 +186,6 @@ export function SongPlayerProvider({
     <SongPlayerContext.Provider value={value}>
       <audio
         ref={audioRef}
-        src={audioSrc}
         preload="auto"
         playsInline
         className="absolute h-px w-px overflow-hidden opacity-0"

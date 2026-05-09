@@ -35,16 +35,22 @@ export { galleryItems } from "./gallery-items";
 export type SongForSalvador = {
   title: string;
   subtitle: string;
-  /** Ruta bajo /public, ej. /audio/cancion.mp3 */
+  /** Ruta principal bajo /public (p. ej. .mp3). */
   audioSrc: string;
+  /** Si el navegador no carga la primera, se prueba en orden (.mpeg legado, otro nombre). */
+  audioFallbackSrcs?: readonly string[];
 };
 
 export const songForSalvador: SongForSalvador = {
   title: "Para Salvador",
   subtitle: "Una canción que le compuse",
-  audioSrc:
-    process.env.NEXT_PUBLIC_SONG_AUDIO_SRC ??
-    "/Salvador y Chely/cancion de salvador.mpeg",
+  /** Primero el archivo que ya suele estar desplegado; luego .mp3 recomendado para Safari/iOS. */
+  audioSrc: "/Salvador y Chely/cancion de salvador.mpeg",
+  audioFallbackSrcs: [
+    "/Salvador y Chely/cancion de salvador.mp3",
+    "/Salvador y Chely/cancion-de-salvador.mp3",
+    "/Salvador y Chely/cancion de salvador.m4a",
+  ],
 };
 
 export const letter = {
@@ -208,6 +214,8 @@ export type DoctorThanksBlock = {
   name: string;
   blurb: string;
   photoSrc: string;
+  /** Variantes de nombre/extension si la primera no carga en el servidor (mayúsculas / .jpg). */
+  photoFallbackSrcs?: readonly string[];
   instagramDoctorHandle: string;
   instagramClinicHandle: string;
 };
@@ -218,6 +226,11 @@ export const doctorThanks: DoctorThanksBlock = {
   blurb:
     "Nos acompañó en el embarazo con una calma que lo cambió todo. Lo indispensable: gracias a su rápida acción y a su profesionalismo, mi hijo nació sano y salvo. Gracias por formar parte de esta historia.",
   photoSrc: "/Salvador y Chely/Salva con la doctora.jpeg",
+  photoFallbackSrcs: [
+    "/Salvador y Chely/salva con la doctora.jpeg",
+    "/Salvador y Chely/Salva con la doctora.jpg",
+    "/Salvador y Chely/salva con la doctora.jpg",
+  ],
   instagramDoctorHandle: "dra.yanaramohtar",
   instagramClinicHandle: "fementidadcentro",
 };

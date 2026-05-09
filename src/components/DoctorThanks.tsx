@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
+import { useMemo, useState } from "react";
 import type { DoctorThanksBlock } from "@/lib/site";
 import { encodePublicPath } from "@/lib/public-url";
 
@@ -9,8 +10,25 @@ function igUrl(handle: string) {
   return `https://www.instagram.com/${handle.replace(/^@/, "")}/`;
 }
 
+function buildPhotoUrls(data: DoctorThanksBlock): string[] {
+  const raw = [data.photoSrc, ...(data.photoFallbackSrcs ?? [])];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const p of raw) {
+    if (!p || seen.has(p)) continue;
+    seen.add(p);
+    out.push(encodePublicPath(p));
+  }
+  return out;
+}
+
 export function DoctorThanks({ data }: { data: DoctorThanksBlock }) {
   const headingId = "doctor-thanks-heading";
+  const photoUrls = useMemo(() => buildPhotoUrls(data), [data]);
+  const [urlIndex, setUrlIndex] = useState(0);
+  const [photoMissing, setPhotoMissing] = useState(false);
+
+  const currentSrc = photoUrls[urlIndex] ?? "";
 
   return (
     <motion.section
@@ -29,11 +47,28 @@ export function DoctorThanks({ data }: { data: DoctorThanksBlock }) {
 
       <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-10">
         <div className="relative mx-auto aspect-[4/5] w-full max-w-[220px] shrink-0 overflow-hidden rounded-2xl bg-[var(--sand)] ring-1 ring-[var(--sand)] sm:mx-0">
-          <img
-            src={encodePublicPath(data.photoSrc)}
-            alt={`${data.name} con Salvador`}
-            className="h-full w-full object-cover"
-          />
+          {!photoMissing && currentSrc ? (
+            <img
+              key={currentSrc}
+              src={currentSrc}
+              alt={`${data.name} con Salvador`}
+              className="h-full w-full object-cover"
+              onError={() => {
+                setUrlIndex((i) => {
+                  if (i + 1 < photoUrls.length) return i + 1;
+                  setPhotoMissing(true);
+                  return i;
+                });
+              }}
+            />
+          ) : (
+            <div className="flex h-full min-h-[200px] flex-col items-center justify-center gap-2 p-4 text-center text-sm text-[var(--muted)]">
+              <p>Añade la foto en el proyecto:</p>
+              <code className="rounded bg-[var(--sand)] px-2 py-1 text-xs text-[var(--ink)]">
+                public/Salvador y Chely/Salva con la doctora.jpeg
+              </code>
+            </div>
+          )}
         </div>
 
         <div className="min-w-0 flex-1 space-y-5 text-center sm:text-left">
