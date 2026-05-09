@@ -21,15 +21,12 @@ export const siteCopy = {
 } as const;
 
 export type GalleryItem = {
-  /** Ruta bajo /public, ej. /gallery/ejemplo.jpg */
+  /** Ruta bajo /public, ej. /Salvador y Chely/foto.jpeg */
   src: string;
   caption: string;
 };
 
-/** Añade archivos en public/gallery/ y actualiza esta lista. */
-export const galleryItems: GalleryItem[] = [
-  // { src: "/gallery/salvador-1.jpg", caption: "Tu primera sonrisa" },
-];
+export { galleryItems } from "./gallery-items";
 
 export const letter = {
   title: "Una carta para ti",

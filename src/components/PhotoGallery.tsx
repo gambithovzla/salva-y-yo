@@ -23,15 +23,19 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
           Tu galería está lista
         </p>
         <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[var(--muted)]">
-          Guarda las fotos en{" "}
+          Coloca las fotos en{" "}
           <code className="rounded bg-[var(--sand)] px-1.5 py-0.5 text-xs">
-            public/gallery/
+            public/Salvador y Chely/
           </code>{" "}
-          y añade las rutas en{" "}
+          y ejecuta{" "}
           <code className="rounded bg-[var(--sand)] px-1.5 py-0.5 text-xs">
-            src/lib/site.ts
+            node scripts/generate-gallery-items.mjs
           </code>{" "}
-          en el array <code className="text-xs">galleryItems</code>.
+          o edita{" "}
+          <code className="rounded bg-[var(--sand)] px-1.5 py-0.5 text-xs">
+            src/lib/gallery-items.ts
+          </code>
+          .
         </p>
       </motion.div>
     );
@@ -50,7 +54,7 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
         >
           <div className="relative aspect-[4/3] w-full bg-[var(--sand)]">
             <Image
-              src={item.src}
+              src={encodeURI(item.src)}
               alt={item.caption}
               fill
               className="object-cover transition duration-500 group-hover:scale-[1.02]"
