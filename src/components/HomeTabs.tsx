@@ -1,9 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Images, Mail, Music2, Ticket } from "lucide-react";
+import { Images, Mail, MailOpen, MapPin, Music2, Ticket } from "lucide-react";
 import { useState } from "react";
-import type { Coupon, GalleryItem } from "@/lib/site";
+import {
+  type Coupon,
+  type GalleryItem,
+  openWhenLetters,
+  ourPlaces,
+} from "@/lib/site";
+import { OpenWhenLetters } from "@/components/OpenWhenLetters";
+import { OurPlacesSection } from "@/components/OurPlacesSection";
 import { LoveCoupons } from "@/components/LoveCoupons";
 import { MotherhoodCounter } from "@/components/MotherhoodCounter";
 import { PhotoGallery } from "@/components/PhotoGallery";
@@ -18,12 +25,14 @@ type Letter = {
   signature: string;
 };
 
-type TabId = "momentos" | "cupones" | "carta" | "musica";
+type TabId = "momentos" | "cupones" | "carta" | "cuando" | "lugares" | "musica";
 
 const tabs: { id: TabId; label: string; icon: typeof Images }[] = [
   { id: "momentos", label: "Momentos", icon: Images },
   { id: "cupones", label: "Cupones", icon: Ticket },
   { id: "carta", label: "Carta", icon: Mail },
+  { id: "cuando", label: "Cuando", icon: MailOpen },
+  { id: "lugares", label: "Lugares", icon: MapPin },
   { id: "musica", label: "Música", icon: Music2 },
 ];
 
@@ -149,6 +158,34 @@ export function HomeTabs({
             transition={{ duration: 0.25 }}
           >
             <LetterSection letter={letter} />
+          </motion.div>
+        ) : null}
+
+        {tab === "cuando" ? (
+          <motion.div
+            key="cuando"
+            role="tabpanel"
+            id="panel-cuando"
+            aria-labelledby="tab-cuando"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <OpenWhenLetters items={openWhenLetters} />
+          </motion.div>
+        ) : null}
+
+        {tab === "lugares" ? (
+          <motion.div
+            key="lugares"
+            role="tabpanel"
+            id="panel-lugares"
+            aria-labelledby="tab-lugares"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <OurPlacesSection places={ourPlaces} />
           </motion.div>
         ) : null}
 

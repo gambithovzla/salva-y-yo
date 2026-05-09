@@ -87,3 +87,126 @@ export const coupons: Coupon[] = [
     detail: "Reservo el momento; tú solo tienes que llegar.",
   },
 ];
+
+/** Sobres digitales: personaliza los textos aquí. */
+export type OpenWhenLetter = {
+  id: string;
+  trigger: string;
+  message: string;
+};
+
+export const openWhenLetters: OpenWhenLetter[] = [
+  {
+    id: "abrazo",
+    trigger: "Ábrelo cuando necesites un abrazo",
+    message:
+      "Aquí va uno enorme, sin soltar pronto. No tienes que pedir permiso para necesitar calor humano.",
+  },
+  {
+    id: "por-que-te-elegi",
+    trigger: "Ábrelo cuando quieras saber por qué te elegí",
+    message:
+      "Por tu risa honesta, tu fuerza silenciosa y cómo haces hogar donde sea que estemos. Te elijo cada día.",
+  },
+  {
+    id: "suficiente",
+    trigger: "Ábrelo cuando sientas que no eres suficiente",
+    message:
+      "Lo eres más de lo que ves en los días cansados. Salvador y yo tenemos la suerte de tenerte; eso no es casualidad.",
+  },
+  {
+    id: "dia-dificil",
+    trigger: "Ábrelo cuando tengas un día difícil",
+    message:
+      "Respira. Ya sobreviviste al 100 % de tus malos días hasta hoy. Descansa cuando puedas; nosotros te cubrimos lo que podamos.",
+  },
+  {
+    id: "reir",
+    trigger: "Ábrelo cuando quieras reírte un rato",
+    message:
+      "Piensa en Salvador haciendo alguna travesura y en una de tus risas que me desarma. Vuelve pronto a esta carta.",
+  },
+  {
+    id: "calma",
+    trigger: "Ábrelo cuando extrañes la calma",
+    message:
+      "La calma volverá en oleadas pequeñas: un té, una ventana abierta, tres respiraciones tuyas. Yo guardo tu espacio.",
+  },
+  {
+    id: "orgullo",
+    trigger: "Ábrelo cuando quieras recordar lo orgulloso que estoy de ti",
+    message:
+      "Estoy orgulloso de cómo amas, de cómo aguantas lo que nadie ve y de la mamá increíble que eres.",
+  },
+  {
+    id: "increible",
+    trigger: "Ábrelo cuando necesites oír que eres increíble",
+    message:
+      "Lo eres. No por ser perfecta, sino por ser real, presente y nuestra.",
+  },
+  {
+    id: "medianoche",
+    trigger: "Ábrelo cuando sea medianoche y pienses en nosotros",
+    message:
+      "También estamos pensando en ti. Duerme si puedes; si no, aquí estamos en espíritu.",
+  },
+  {
+    id: "gracias",
+    trigger: "Ábrelo cuando quieras que te diga gracias otra vez",
+    message:
+      "Gracias por cada noche en vela, cada gesto de amor y por decir sí a esta familia una y mil veces.",
+  },
+];
+
+/**
+ * Coordenadas aproximadas — sustituye lat/lng por las reales en Google Maps.
+ * Fotos: rutas bajo /public.
+ */
+export type OurPlace = {
+  id: string;
+  title: string;
+  lat: number;
+  lng: number;
+  photoSrc: string;
+  anecdote: string;
+};
+
+export const ourPlaces: OurPlace[] = [
+  {
+    id: "conocieron",
+    title: "Donde nos conocimos",
+    lat: 20.6736,
+    lng: -103.344,
+    photoSrc: "/Salvador y Chely/Chely y Salva esperando su cita en el ginecologo.jpeg",
+    anecdote:
+      "El punto de partida de nuestra historia; desde aquí todo cobró sentido.",
+  },
+  {
+    id: "nacimiento",
+    title: "Donde nació Salvador",
+    lat: 20.6942,
+    lng: -103.362,
+    photoSrc: "/Salvador y Chely/Nacimiento Salva.jpeg",
+    anecdote:
+      "El día que el mundo se volvió más grande y más tierno a la vez.",
+  },
+  {
+    id: "cafeteria",
+    title: "Nuestra cafetería favorita",
+    lat: 20.6712,
+    lng: -103.368,
+    photoSrc: "/Salvador y Chely/chey embarazada en ropa vinotinto.jpeg",
+    anecdote:
+      "Donde repetimos la misma orden y seguimos eligiendo el mismo rincón.",
+  },
+  {
+    id: "escapada",
+    title: "Última escapada juntos",
+    lat: 20.7469,
+    lng: -103.452,
+    photoSrc:
+      "/Salvador y Chely/salva en su asiento del carro saliendo de la clinica por primera vez.jpeg",
+    anecdote:
+      "Aire nuevo, risas guardadas y ganas de volver a casa siendo nosotros.",
+  },
+];

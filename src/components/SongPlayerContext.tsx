@@ -70,22 +70,39 @@ export function SongPlayerProvider({
     };
   }, []);
 
-  /** Intento de autoplay (muchas PWA piden un gesto antes). */
+  /**
+   * Autoplay: intento al montar, de nuevo cuando el audio puede reproducirse,
+   * y una vez al primer gesto en la página (política iOS/Safari y similares).
+   */
   useEffect(() => {
     const el = audioRef.current;
     if (!el) return;
-    let cancelled = false;
-    const run = async () => {
+
+    const tryPlay = async () => {
       try {
         await el.play();
-        if (!cancelled) setNeedsGesture(false);
+        setNeedsGesture(false);
       } catch {
-        if (!cancelled) setNeedsGesture(true);
+        setNeedsGesture(true);
       }
     };
-    void run();
+
+    void tryPlay();
+
+    const onCanPlay = () => {
+      void tryPlay();
+    };
+    el.addEventListener("canplay", onCanPlay, { once: true });
+
+    const onFirstGesture = () => {
+      void tryPlay();
+      document.removeEventListener("pointerdown", onFirstGesture, true);
+    };
+    document.addEventListener("pointerdown", onFirstGesture, true);
+
     return () => {
-      cancelled = true;
+      el.removeEventListener("canplay", onCanPlay);
+      document.removeEventListener("pointerdown", onFirstGesture, true);
     };
   }, []);
 
