@@ -6,9 +6,11 @@ import { useState } from "react";
 import {
   type Coupon,
   type GalleryItem,
+  doctorThanks,
   openWhenLetters,
   ourPlaces,
 } from "@/lib/site";
+import { DoctorThanks } from "@/components/DoctorThanks";
 import { OpenWhenLetters } from "@/components/OpenWhenLetters";
 import { OurPlacesSection } from "@/components/OurPlacesSection";
 import { LoveCoupons } from "@/components/LoveCoupons";
@@ -107,6 +109,8 @@ export function HomeTabs({
               </h2>
               <MotherhoodCounter startIso={motherhoodStartIso} />
             </section>
+
+            <DoctorThanks data={doctorThanks} />
 
             <section aria-labelledby="gallery-heading" className="space-y-8">
               <h2

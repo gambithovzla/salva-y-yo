@@ -148,7 +148,7 @@ export const openWhenLetters: OpenWhenLetter[] = [
     id: "medianoche",
     trigger: "Ábrelo cuando sea medianoche y pienses en nosotros",
     message:
-      "También estamos pensando en ti. Duerme si puedes; si no, aquí estamos en espíritu.",
+      "Si el reloj marca tarde y nos tienes en la cabeza: es porque nuestra historia sigue encendida. Imagina una risa suave en la oscuridad y la misma luna mirándonos a todos. También estamos pensando en ti, con cariño que no apaga el reloj.",
   },
   {
     id: "gracias",
@@ -174,39 +174,50 @@ export type OurPlace = {
 export const ourPlaces: OurPlace[] = [
   {
     id: "conocieron",
-    title: "Donde nos conocimos",
-    lat: 20.6736,
-    lng: -103.344,
-    photoSrc: "/Salvador y Chely/Chely y Salva esperando su cita en el ginecologo.jpeg",
+    title: "Donde nos conocimos — Playa Los Ángeles, La Guaira (Venezuela)",
+    lat: 10.6032,
+    lng: -66.9325,
+    photoSrc: "/Salvador y Chely/donde nos conocimos.jpeg",
     anecdote:
-      "El punto de partida de nuestra historia; desde aquí todo cobró sentido.",
+      "La Guaira y esa playa donde empezó todo lo nuestro.",
   },
   {
     id: "nacimiento",
-    title: "Donde nació Salvador",
-    lat: 20.6942,
-    lng: -103.362,
-    photoSrc: "/Salvador y Chely/Nacimiento Salva.jpeg",
-    anecdote:
-      "El día que el mundo se volvió más grande y más tierno a la vez.",
-  },
-  {
-    id: "cafeteria",
-    title: "Nuestra cafetería favorita",
-    lat: 20.6712,
-    lng: -103.368,
-    photoSrc: "/Salvador y Chely/chey embarazada en ropa vinotinto.jpeg",
-    anecdote:
-      "Donde repetimos la misma orden y seguimos eligiendo el mismo rincón.",
-  },
-  {
-    id: "escapada",
-    title: "Última escapada juntos",
-    lat: 20.7469,
-    lng: -103.452,
+    title: "Donde nació Salvador — Clínica San Felipe, Jesús María (Lima, Perú)",
+    lat: -12.0724,
+    lng: -77.0325,
     photoSrc:
-      "/Salvador y Chely/salva en su asiento del carro saliendo de la clinica por primera vez.jpeg",
+      "/Salvador y Chely/Salvador con su foto mas hermosa de recien nacido, durmiendo, 3 dias de nacido.jpeg",
     anecdote:
-      "Aire nuevo, risas guardadas y ganas de volver a casa siendo nosotros.",
+      "Tres días de sueño celestial: tu primer hogar hospitalario y el enclave donde conocimos a Salvador.",
+  },
+  {
+    id: "lugar-favorito",
+    title: "Nuestro lugar favorito — Isla Margarita (Venezuela)",
+    lat: 10.9658,
+    lng: -63.8535,
+    photoSrc: "/Salvador y Chely/nuestro lugar favorito, venezuela.jpeg",
+    anecdote:
+      "Arena, sal y calma: el sitio al que volvemos en la mente cuando queremos felicidad sencilla.",
   },
 ];
+
+/** Homenaje a quien las acompañó en el embarazo (editar textos o foto en /public). */
+export type DoctorThanksBlock = {
+  title: string;
+  name: string;
+  blurb: string;
+  photoSrc: string;
+  instagramDoctorHandle: string;
+  instagramClinicHandle: string;
+};
+
+export const doctorThanks: DoctorThanksBlock = {
+  title: "Un agradecimiento especial",
+  name: "Dra. Yanara Mohtar",
+  blurb:
+    "Nos acompañó en el embarazo con una calma que lo cambió todo; además quedó una amistad hermosa contigo. Gracias por formar parte de esta historia.",
+  photoSrc: "/Salvador y Chely/salva con la doctora.jpeg",
+  instagramDoctorHandle: "dra.yanaramohtar",
+  instagramClinicHandle: "fementidadcentro",
+};

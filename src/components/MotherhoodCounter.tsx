@@ -30,28 +30,37 @@ export function MotherhoodCounter({ startIso }: { startIso: string }) {
   const minutes = Math.floor((elapsed % (60 * 60 * 1000)) / (60 * 1000));
   const seconds = Math.floor((elapsed % (60 * 1000)) / 1000);
 
-  /** Estadísticas poéticas que solo dependen de días enteros (cambian como mucho cada ~24 h). */
+  /** Estadísticas poéticas por días (ternura + respiraciones conscientes, órdenes creíbles). */
   const whimsical = useMemo(() => {
     const d = Math.max(0, days);
     const weeks = Math.floor(d / 7);
     return {
       hugs: Math.round(d * 5 + weeks * 3),
-      calm: Math.round(d * 8 + weeks * 5),
+      /** ~4 “respiraciones profundas” reconocibles por día de maternidad + algo por semana. */
+      calm: Math.round(d * 4 + weeks * 2),
     };
   }, [days]);
 
-  /** Ritmo “real” acoplado al mismo temporizador que el contador principal. */
+  /**
+   * Latidos siguen el reloj; miradas y sonrisas escalan por días para no inflar miles por minuto.
+   * Miradas ~7/día que “dicen todo”; sonrisas ~15/día compartidas en familia (órdenes realistas).
+   */
   const rhythmStats = useMemo(() => {
+    const d = Math.max(0, days);
     const minutos = elapsed / 60_000;
     const latidosCompartidos = Math.floor(
       minutos * BPM_REPOSO_ADULTO * 2,
     );
-    /** ~1 mirada fuerte cada 33 min en promedio (vigilia + vínculo). */
-    const miradas = Math.floor(elapsed / (1000 * 60 * 33));
-    /** Sonrisas compartidas algo más frecuentes: ~cada 9 min. */
-    const sonrisas = Math.floor(elapsed / (1000 * 60 * 9));
+    const miradas = Math.max(
+      0,
+      Math.round(d * 7 + hours * 0.12),
+    );
+    const sonrisas = Math.max(
+      0,
+      Math.round(d * 15 + hours * 0.2),
+    );
     return { latidosCompartidos, miradas, sonrisas };
-  }, [elapsed]);
+  }, [days, hours, elapsed]);
 
   const unitClass =
     "flex min-w-[4.5rem] flex-col items-center rounded-2xl bg-[var(--card)] px-4 py-4 shadow-sm ring-1 ring-[var(--sand)] backdrop-blur-sm";
