@@ -79,11 +79,14 @@ export function SalvadorLaugh({ clip }: { clip: SalvadorLaughClip }) {
   return (
     <motion.section
       id="regalo-risa"
-      className="relative z-10 mx-auto max-w-lg px-6 pb-8 pt-2 sm:pb-10"
+      className="relative z-10 mx-auto max-w-lg px-6 pb-10 pt-12 sm:pb-14 sm:pt-16"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
     >
+      {/* Siempre montado para precargar el audio antes de abrir el sobre */}
+      <audio ref={audioRef} preload="auto" playsInline className="sr-only" />
+
       <AnimatePresence mode="wait">
         {!envelopeOpen ? (
           <motion.div
@@ -213,8 +216,6 @@ export function SalvadorLaugh({ clip }: { clip: SalvadorLaughClip }) {
                   con el nombre configurado en el código.
                 </p>
               ) : null}
-
-              <audio ref={audioRef} preload="auto" playsInline className="sr-only" />
             </div>
           </motion.div>
         )}

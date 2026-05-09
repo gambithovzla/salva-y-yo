@@ -92,7 +92,7 @@ export const letter = {
     "Feliz primer Día de la Madre. Te amamos.",
   ],
   signOff: "Con todo mi cariño,",
-  signature: "Salvador & yo",
+  signature: "el padre de Salvador",
 } as const;
 
 /** Carta en primera persona de Salvador; firma simbólica (huella SVG) en el componente. */
@@ -113,13 +113,13 @@ export const letterFromSalvador: LetterFromSalvador = {
   paragraphs: [
     "Todavía no sé escribir solito: las letras todavía no me caben en la mano. Pero papá me presta sus dedos para decirte algo que yo ya llevo adentro desde antes de tener palabras: tu olor es mi lugar favorito del mundo.",
     "Cuando me acunas y la casa baja el volumen, yo solo sé que estoy bien. Tu voz me dibuja el sueño; tu pecho es mi mapa; tus manos son el idioma en el que entiendo, sin prisa, que estoy en casa.",
-    "Gracias por cada noche en vela que casi nadie ve, por el amor que no te sobra y aun así me das, y por enseñarme qué es querer sin pedirme nada a cambio.",
+    "Gracias por cada noche en vela que casi nadie ve, por el amor que me das, y por enseñarme qué es querer sin pedirme nada a cambio.",
     "Te amo. Un día, cuando mis manos sepan escribir solas, volveré a esta carta y te prometo recordarte lo mismo que hoy siento: que tú eres mi primer hogar.",
   ],
   signOff: "Con todo mi amor de bebé —el que todavía dice más con el abrazo que con las frases—,",
   signatureName: "Salvador",
   scribeNote:
-    "Dictado con los dedos de papá: las mías todavía están ocupadas agarrando el tuyo.",
+    "Dictado con los dedos de papá: los míos todavía están ocupados agarrando todo lo que encuentro.",
 };
 
 export type Coupon = {

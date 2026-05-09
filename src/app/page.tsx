@@ -33,7 +33,6 @@ export default function Home() {
       />
 
       <SongPlayerProvider song={songForSalvador}>
-        <SalvadorLaugh clip={salvadorLaugh} />
         <div className="relative z-10">
           <HomeTabs
             motherhoodStartIso={motherhoodStartIso}
@@ -43,6 +42,7 @@ export default function Home() {
             letterFromSalvador={letterFromSalvador}
           />
         </div>
+        <SalvadorLaugh clip={salvadorLaugh} />
       </SongPlayerProvider>
 
       <footer className="relative z-10 overflow-hidden border-t border-[var(--accent)]/15 bg-gradient-to-b from-[var(--card)] via-[var(--cream)] to-[var(--sand)]/65 px-6 py-12 text-center backdrop-blur-sm">
