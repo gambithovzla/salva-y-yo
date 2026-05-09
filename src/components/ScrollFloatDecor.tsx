@@ -1,48 +1,45 @@
 "use client";
 
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 
-/** Capa decorativa fija: corazones y flores que se mueven suavemente al hacer scroll. */
+/**
+ * Decoración muy suave: cada elemento flota con su propio ritmo (sin atarlo al scroll),
+ * para que no parezca una capa “pegada” que solo se desplaza al hacer scroll.
+ */
+const SPECS = [
+  { emoji: "🌸", left: "7%", top: "16%", dur: 9.5, delay: 0 },
+  { emoji: "✨", left: "42%", top: "10%", dur: 7.8, delay: 2.1 },
+  { emoji: "💖", left: "86%", top: "22%", dur: 11.2, delay: 0.8 },
+  { emoji: "🌺", left: "12%", top: "56%", dur: 10.4, delay: 3 },
+  { emoji: "💕", left: "78%", top: "48%", dur: 8.6, delay: 1.5 },
+  { emoji: "🌼", left: "52%", top: "72%", dur: 12, delay: 4 },
+] as const;
+
 export function ScrollFloatDecor() {
-  const { scrollYProgress } = useScroll();
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 40,
-    damping: 20,
-  });
-
-  const y1 = useTransform(smoothProgress, [0, 1], ["0%", "-18%"]);
-  const y2 = useTransform(smoothProgress, [0, 1], ["0%", "-28%"]);
-  const y3 = useTransform(smoothProgress, [0, 1], ["0%", "-12%"]);
-  const rotate1 = useTransform(smoothProgress, [0, 1], [0, -12]);
-  const rotate2 = useTransform(smoothProgress, [0, 1], [0, 8]);
-
-  const items = [
-    { emoji: "💖", style: { left: "6%", top: "14%" }, y: y1, r: rotate1, s: "text-2xl sm:text-3xl" },
-    { emoji: "🌸", style: { left: "82%", top: "22%" }, y: y2, r: rotate2, s: "text-xl sm:text-2xl" },
-    { emoji: "💗", style: { left: "12%", top: "48%" }, y: y3, r: rotate1, s: "text-xl sm:text-2xl" },
-    { emoji: "🌺", style: { right: "8%", top: "42%" }, y: y1, r: rotate2, s: "text-2xl sm:text-3xl" },
-    { emoji: "✨", style: { left: "44%", top: "8%" }, y: y2, r: rotate1, s: "text-lg sm:text-xl" },
-    { emoji: "💕", style: { right: "18%", top: "62%" }, y: y3, r: rotate2, s: "text-xl" },
-    { emoji: "🌼", style: { left: "24%", top: "72%" }, y: y1, r: rotate2, s: "text-lg sm:text-xl" },
-    { emoji: "💝", style: { right: "28%", top: "78%" }, y: y2, r: rotate1, s: "text-xl sm:text-2xl" },
-  ] as const;
-
   return (
     <div
       className="pointer-events-none fixed inset-0 z-[1] overflow-hidden"
       aria-hidden
     >
-      {items.map((item, i) => (
+      {SPECS.map((s, i) => (
         <motion.span
           key={i}
-          className={`absolute select-none opacity-[0.22] sm:opacity-[0.28] ${item.s}`}
-          style={{
-            ...item.style,
-            y: item.y,
-            rotate: item.r,
+          className="absolute select-none text-xl opacity-[0.12] sm:text-2xl sm:opacity-[0.18]"
+          style={{ left: s.left, top: s.top }}
+          animate={{
+            y: [0, -10, 6, -4, 0],
+            x: [0, 5, -6, 3, 0],
+            rotate: [0, 5, -4, 3, 0],
+            scale: [1, 1.05, 0.98, 1.02, 1],
+          }}
+          transition={{
+            duration: s.dur,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: s.delay,
           }}
         >
-          {item.emoji}
+          {s.emoji}
         </motion.span>
       ))}
     </div>

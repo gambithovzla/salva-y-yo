@@ -1,4 +1,6 @@
+import { HeroSection } from "@/components/HeroSection";
 import { HomeTabs } from "@/components/HomeTabs";
+import { SalvadorLaugh } from "@/components/SalvadorLaugh";
 import { ScrollFloatDecor } from "@/components/ScrollFloatDecor";
 import { SongPlayerProvider } from "@/components/SongPlayerContext";
 import {
@@ -6,6 +8,7 @@ import {
   galleryItems,
   getMotherhoodStartIso,
   letter,
+  salvadorLaugh,
   siteCopy,
   songForSalvador,
 } from "@/lib/site";
@@ -22,19 +25,14 @@ export default function Home() {
 
       <ScrollFloatDecor />
 
-      <header className="relative z-10 mx-auto max-w-3xl px-6 pb-8 pt-16 text-center sm:pt-24">
-        <p className="mb-4 text-xs font-medium uppercase tracking-[0.35em] text-[var(--muted)]">
-          {siteCopy.heroEyebrow}
-        </p>
-        <h1 className="font-serif text-4xl leading-tight text-[var(--ink)] sm:text-5xl">
-          {siteCopy.heroTitle}
-        </h1>
-        <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-[var(--muted)]">
-          {siteCopy.heroLead}
-        </p>
-      </header>
+      <HeroSection
+        eyebrow={siteCopy.heroEyebrow}
+        title={siteCopy.heroTitle}
+        lead={siteCopy.heroLead}
+      />
 
       <SongPlayerProvider song={songForSalvador}>
+        <SalvadorLaugh clip={salvadorLaugh} />
         <div className="relative z-10">
           <HomeTabs
             motherhoodStartIso={motherhoodStartIso}

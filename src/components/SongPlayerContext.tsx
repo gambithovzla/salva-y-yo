@@ -21,6 +21,8 @@ export type SongPlayerContextValue = {
   loadError: string | null;
   togglePlay: () => void;
   setVolumePct: (n: number) => void;
+  /** Pausa la canción principal (p. ej. antes de reproducir otro clip). */
+  pauseMusic: () => void;
 };
 
 const SongPlayerContext = createContext<SongPlayerContextValue | null>(null);
@@ -161,6 +163,10 @@ export function SongPlayerProvider({
     }
   }, []);
 
+  const pauseMusic = useCallback(() => {
+    audioRef.current?.pause();
+  }, []);
+
   const value = useMemo(
     (): SongPlayerContextValue => ({
       song,
@@ -170,6 +176,7 @@ export function SongPlayerProvider({
       loadError,
       togglePlay,
       setVolumePct,
+      pauseMusic,
     }),
     [
       song,
@@ -179,6 +186,7 @@ export function SongPlayerProvider({
       loadError,
       togglePlay,
       setVolumePct,
+      pauseMusic,
     ],
   );
 

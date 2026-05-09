@@ -53,6 +53,27 @@ export const songForSalvador: SongForSalvador = {
   ],
 };
 
+/** Clip corto de la risa de Salvador — lo más entrañable de la página. */
+export type SalvadorLaughClip = {
+  title: string;
+  subtitle: string;
+  hint: string;
+  audioSrc: string;
+  audioFallbackSrcs?: readonly string[];
+};
+
+export const salvadorLaugh: SalvadorLaughClip = {
+  title: "La mejor risa del mundo",
+  subtitle: "Es la risa de Salvador.",
+  hint: "Toca el corazón y escucha lo más bonito que tenemos.",
+  audioSrc: "/Salvador y Chely/la-mejor-risa-del-mundo.ogg",
+  audioFallbackSrcs: [
+    "/Salvador y Chely/la-mejor-risa-del-mundo.mp3",
+    "/Salvador y Chely/la-mejor-risa-del-mundo.m4a",
+    "/Salvador y Chely/la-mejor-risa-del-mundo.wav",
+  ],
+};
+
 export const letter = {
   title: "Una carta para ti",
   greeting: "Amor mío,",
