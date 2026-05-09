@@ -3,9 +3,13 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Heart, ImageIcon } from "lucide-react";
+import { useState } from "react";
 import type { GalleryItem } from "@/lib/site";
+import { GalleryLightbox } from "./GalleryLightbox";
 
 export function PhotoGallery({ items }: { items: GalleryItem[] }) {
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
   if (items.length === 0) {
     return (
       <motion.div
@@ -42,35 +46,53 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
   }
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2">
-      {items.map((item, i) => (
-        <motion.figure
-          key={item.src}
-          className="group overflow-hidden rounded-3xl bg-[var(--card)] shadow-sm ring-1 ring-[var(--sand)] backdrop-blur-sm"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ delay: i * 0.08 }}
-        >
-          <div className="relative aspect-[4/3] w-full bg-[var(--sand)]">
-            <Image
-              src={encodeURI(item.src)}
-              alt={item.caption}
-              fill
-              className="object-cover transition duration-500 group-hover:scale-[1.02]"
-              sizes="(max-width: 640px) 100vw, 50vw"
-              priority={i < 2}
-            />
-          </div>
-          <figcaption className="flex items-center gap-2 px-5 py-4 text-sm text-[var(--ink)]">
-            <Heart
-              className="h-4 w-4 shrink-0 text-[var(--accent)]"
-              aria-hidden
-            />
-            {item.caption}
-          </figcaption>
-        </motion.figure>
-      ))}
-    </div>
+    <>
+      <div className="grid gap-6 sm:grid-cols-2">
+        {items.map((item, i) => (
+          <motion.figure
+            key={item.src}
+            className="group overflow-hidden rounded-3xl bg-[var(--card)] shadow-sm ring-1 ring-[var(--sand)] backdrop-blur-sm"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ delay: i * 0.08 }}
+          >
+            <button
+              type="button"
+              className="relative block w-full cursor-zoom-in text-left outline-none ring-[var(--accent)] ring-offset-2 ring-offset-[var(--cream)] transition focus-visible:ring-2"
+              aria-label={`Ampliar foto: ${item.caption}`}
+              onClick={() => setLightboxIndex(i)}
+            >
+              <div className="relative aspect-[4/3] w-full bg-[var(--sand)]">
+                <Image
+                  src={encodeURI(item.src)}
+                  alt=""
+                  fill
+                  className="object-cover transition duration-500 group-hover:scale-[1.02]"
+                  sizes="(max-width: 640px) 100vw, 50vw"
+                  priority={i < 2}
+                />
+              </div>
+            </button>
+            <figcaption className="flex items-center gap-2 px-5 py-4 text-sm text-[var(--ink)]">
+              <Heart
+                className="h-4 w-4 shrink-0 text-[var(--accent)]"
+                aria-hidden
+              />
+              {item.caption}
+            </figcaption>
+          </motion.figure>
+        ))}
+      </div>
+
+      {lightboxIndex !== null ? (
+        <GalleryLightbox
+          items={items}
+          index={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onChangeIndex={setLightboxIndex}
+        />
+      ) : null}
+    </>
   );
 }
