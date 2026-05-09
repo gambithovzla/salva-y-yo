@@ -113,15 +113,17 @@ export const letterFromSalvador: LetterFromSalvador = {
   sectionEyebrow: "Escrita como Salvador",
   greeting: "Mamá:",
   paragraphs: [
-    "Todavía no sé escribir solito: las letras todavía no me caben en la mano. Pero papá me presta sus dedos para decirte algo que yo ya llevo adentro desde antes de tener palabras: tu olor es mi lugar favorito del mundo.",
-    "Cuando me acunas y la casa baja el volumen, yo solo sé que estoy bien. Tu voz me dibuja el sueño; tu pecho es mi mapa; tus manos son el idioma en el que entiendo, sin prisa, que estoy en casa.",
-    "Gracias por cada noche en vela que casi nadie ve, por el amor que me das, y por enseñarme qué es querer sin pedirme nada a cambio.",
-    "Te amo. Un día, cuando mis manos sepan escribir solas, volveré a esta carta y te prometo recordarte lo mismo que hoy siento: que tú eres mi primer hogar.",
+    "Todavía no sé escribir con mis propias manos. Apenas estoy aprendiendo a agarrar el mundo poquito a poquito. Por eso hoy papá me presta las suyas, para decirte algo que yo ya siento desde antes de entender las palabras: contigo todo se siente seguro.",
+    "Tu voz es el sonido donde descanso. Tu pecho es el lugar donde el miedo desaparece. Y cuando me abrazas, aunque yo todavía no lo pueda explicar, mi corazón entiende que estoy exactamente donde debo estar.",
+    "Tal vez ahora soy muy pequeño para recordarlo todo algún día. Pero quiero que esta carta quede aquí, para que nunca olvides cuánto amor ya vive en mí gracias a ti. Porque mientras tú me enseñas a conocer el mundo, yo estoy aprendiendo que el amor tiene tu cara, tu olor y tus brazos.",
+    "Gracias por las noches en las que no dormiste para cuidarme. Gracias por cantarme aunque estuvieras cansada. Gracias por besarme la frente como si con eso pudieras protegerme de todo.",
+    "Te amo, mamá. Y cuando sea grande, espero parecerme un poquito a la forma tan bonita en la que tú amas.",
   ],
-  signOff: "Con todo mi amor de bebé —el que todavía dice más con el abrazo que con las frases—,",
+  signOff:
+    "Con todo mi amor de bebé —ese que todavía habla más con abrazos que con palabras—,",
   signatureName: "Salvador",
   scribeNote:
-    "Dictado con los dedos de papá: los míos todavía están ocupados agarrando todo lo que encuentro.",
+    "Dictado con los dedos de papá, porque los míos todavía están demasiado ocupados descubriendo el mundo.",
 };
 
 export type Coupon = {
