@@ -24,6 +24,22 @@ export const siteCopy = {
   footerClosing: "mi compañera incondicional y mi hijo.",
 } as const;
 
+/**
+ * Página reservada `/para-abuela`: no enlazada desde la home; solo quien reciba el URL.
+ */
+export const abuelaExclusiveCopy = {
+  metaTitle: "Para abuela",
+  eyebrow: "Exclusivo",
+  title: "Solo para ti, abuela",
+  lead:
+    "Esta página no aparece en el menú del regalo principal: es un espacio aparte para que veas, con calma, los momentos de Salvador contigo. Solo entra quien tú invites con el enlace.",
+  galleryEyebrow: "Tu nieto y tú",
+  galleryTitle: "Recuerdos juntos",
+  gallerySubtitle:
+    "Aquí el centro sois vosotros dos; el resto de la familia tiene su propia galería en otro sitio.",
+  footerLine: "Con cariño",
+} as const;
+
 export type GalleryItem = {
   /** Ruta bajo /public, ej. /Salvador y Chely/foto.jpeg */
   src: string;
