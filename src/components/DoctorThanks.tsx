@@ -62,11 +62,13 @@ export function DoctorThanks({ data }: { data: DoctorThanksBlock }) {
               }}
             />
           ) : (
-            <div className="flex h-full min-h-[200px] flex-col items-center justify-center gap-2 p-4 text-center text-sm text-[var(--muted)]">
-              <p>Añade la foto en el proyecto:</p>
-              <code className="rounded bg-[var(--sand)] px-2 py-1 text-xs text-[var(--ink)]">
-                public/Salvador y Chely/Salva con la doctora.jpeg
-              </code>
+            <div className="flex h-full min-h-[200px] flex-col items-center justify-center gap-3 bg-[linear-gradient(160deg,var(--sand)_0%,transparent_55%)] p-6 text-center">
+              <span className="text-4xl" aria-hidden>
+                💝
+              </span>
+              <p className="font-serif text-sm italic leading-relaxed text-[var(--muted)]">
+                Un recuerdo que guardamos con cariño.
+              </p>
             </div>
           )}
         </div>
