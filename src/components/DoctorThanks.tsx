@@ -10,6 +10,14 @@ function igUrl(handle: string) {
   return `https://www.instagram.com/${handle.replace(/^@/, "")}/`;
 }
 
+function blurbParagraphs(blurb: string): string[] {
+  return blurb
+    .trim()
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+}
+
 function buildPhotoUrls(data: DoctorThanksBlock): string[] {
   const raw = [data.photoSrc, ...(data.photoFallbackSrcs ?? [])];
   const seen = new Set<string>();
@@ -75,9 +83,11 @@ export function DoctorThanks({ data }: { data: DoctorThanksBlock }) {
 
         <div className="min-w-0 flex-1 space-y-5 text-center sm:text-left">
           <p className="font-serif text-xl text-[var(--ink)]">{data.name}</p>
-          <p className="text-base leading-relaxed text-[var(--muted)]">
-            {data.blurb}
-          </p>
+          <div className="space-y-4 text-base leading-relaxed text-[var(--muted)]">
+            {blurbParagraphs(data.blurb).map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
+          </div>
 
           <div className="flex flex-col gap-3 pt-2 sm:items-start">
             <a
