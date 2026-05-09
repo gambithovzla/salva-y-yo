@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { AtSign } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import type { DoctorThanksBlock } from "@/lib/site";
+import { encodePublicPath } from "@/lib/public-url";
 
 function igUrl(handle: string) {
   return `https://www.instagram.com/${handle.replace(/^@/, "")}/`;
@@ -29,7 +30,7 @@ export function DoctorThanks({ data }: { data: DoctorThanksBlock }) {
       <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-10">
         <div className="relative mx-auto aspect-[4/5] w-full max-w-[220px] shrink-0 overflow-hidden rounded-2xl bg-[var(--sand)] ring-1 ring-[var(--sand)] sm:mx-0">
           <img
-            src={encodeURI(data.photoSrc)}
+            src={encodePublicPath(data.photoSrc)}
             alt={`${data.name} con Salvador`}
             className="h-full w-full object-cover"
           />
@@ -48,8 +49,8 @@ export function DoctorThanks({ data }: { data: DoctorThanksBlock }) {
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--sand)]/70 px-4 py-2.5 text-sm font-medium text-[var(--ink)] transition hover:bg-[var(--sand)] sm:justify-start"
             >
-              <AtSign className="h-4 w-4 shrink-0 text-[var(--accent)]" aria-hidden />
-              @{data.instagramDoctorHandle.replace(/^@/, "")}
+              <ExternalLink className="h-4 w-4 shrink-0 text-[var(--accent)]" aria-hidden />
+              Instagram · @{data.instagramDoctorHandle.replace(/^@/, "")}
             </a>
             <a
               href={igUrl(data.instagramClinicHandle)}
@@ -57,8 +58,8 @@ export function DoctorThanks({ data }: { data: DoctorThanksBlock }) {
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--sand)]/70 px-4 py-2.5 text-sm font-medium text-[var(--ink)] transition hover:bg-[var(--sand)] sm:justify-start"
             >
-              <AtSign className="h-4 w-4 shrink-0 text-[var(--accent)]" aria-hidden />
-              Clínica @{data.instagramClinicHandle.replace(/^@/, "")}
+              <ExternalLink className="h-4 w-4 shrink-0 text-[var(--accent)]" aria-hidden />
+              Clínica Fementidad · @{data.instagramClinicHandle.replace(/^@/, "")}
             </a>
           </div>
         </div>

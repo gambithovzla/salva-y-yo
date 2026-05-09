@@ -216,7 +216,7 @@ export const doctorThanks: DoctorThanksBlock = {
   title: "Un agradecimiento especial",
   name: "Dra. Yanara Mohtar",
   blurb:
-    "Nos acompañó en el embarazo con una calma que lo cambió todo; además quedó una amistad hermosa contigo. Gracias por formar parte de esta historia.",
+    "Nos acompañó en el embarazo con una calma que lo cambió todo. Lo indispensable: gracias a su rápida acción y a su profesionalismo, mi hijo nació sano y salvo. Gracias por formar parte de esta historia.",
   photoSrc: "/Salvador y Chely/salva con la doctora.jpeg",
   instagramDoctorHandle: "dra.yanaramohtar",
   instagramClinicHandle: "fementidadcentro",

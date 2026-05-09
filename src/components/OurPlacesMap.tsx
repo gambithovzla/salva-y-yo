@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import type { OurPlace } from "@/lib/site";
+import { encodePublicPath } from "@/lib/public-url";
 import "leaflet/dist/leaflet.css";
 
 function escapeHtml(s: string) {
@@ -12,7 +13,11 @@ function escapeHtml(s: string) {
     .replace(/"/g, "&quot;");
 }
 
-export function OurPlacesMap({ places }: { places: OurPlace[] }) {
+export function OurPlacesMap({
+  places,
+}: {
+  places: readonly OurPlace[];
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<import("leaflet").Map | null>(null);
 
@@ -64,15 +69,15 @@ export function OurPlacesMap({ places }: { places: OurPlace[] }) {
       }).addTo(map);
 
       places.forEach((p) => {
-        const imgUrl = encodeURI(p.photoSrc);
+        const imgUrl = encodePublicPath(p.photoSrc);
         const marker = L.marker([p.lat, p.lng]).addTo(map);
         marker.bindPopup(
-          `<div style="min-width:210px;max-width:260px">
-            <strong style="display:block;margin-bottom:6px;font-size:15px">${escapeHtml(p.title)}</strong>
-            <img src="${imgUrl}" alt="" width="240" height="140" style="width:100%;height:140px;object-fit:cover;border-radius:10px;display:block;margin:8px 0" loading="lazy" decoding="async" />
+          `<div style="min-width:220px;max-width:min(92vw,320px)">
+            <strong style="display:block;margin-bottom:6px;font-size:15px;line-height:1.3">${escapeHtml(p.title)}</strong>
+            <img src="${imgUrl}" alt="" style="display:block;width:100%;height:auto;max-height:min(48vh,280px);object-fit:contain;object-position:center;background:#f5f0e8;border-radius:10px;margin:8px 0" loading="lazy" decoding="async" />
             <p style="margin:0;font-size:13px;line-height:1.45;color:#333">${escapeHtml(p.anecdote)}</p>
           </div>`,
-          { maxWidth: 280, className: "our-place-popup" },
+          { maxWidth: 340, className: "our-place-popup" },
         );
       });
     });

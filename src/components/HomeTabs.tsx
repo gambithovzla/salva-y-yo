@@ -1,7 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Images, Mail, MailOpen, MapPin, Music2, Ticket } from "lucide-react";
+import {
+  Heart,
+  Images,
+  Mail,
+  MailOpen,
+  MapPin,
+  Music2,
+  Ticket,
+} from "lucide-react";
 import { useState } from "react";
 import {
   type Coupon,
@@ -27,7 +35,14 @@ type Letter = {
   signature: string;
 };
 
-type TabId = "momentos" | "cupones" | "carta" | "cuando" | "lugares" | "musica";
+type TabId =
+  | "momentos"
+  | "cupones"
+  | "carta"
+  | "cuando"
+  | "lugares"
+  | "gracias"
+  | "musica";
 
 const tabs: { id: TabId; label: string; icon: typeof Images }[] = [
   { id: "momentos", label: "Momentos", icon: Images },
@@ -35,6 +50,7 @@ const tabs: { id: TabId; label: string; icon: typeof Images }[] = [
   { id: "carta", label: "Carta", icon: Mail },
   { id: "cuando", label: "Cuando", icon: MailOpen },
   { id: "lugares", label: "Lugares", icon: MapPin },
+  { id: "gracias", label: "Gracias", icon: Heart },
   { id: "musica", label: "Música", icon: Music2 },
 ];
 
@@ -109,8 +125,6 @@ export function HomeTabs({
               </h2>
               <MotherhoodCounter startIso={motherhoodStartIso} />
             </section>
-
-            <DoctorThanks data={doctorThanks} />
 
             <section aria-labelledby="gallery-heading" className="space-y-8">
               <h2
@@ -190,6 +204,20 @@ export function HomeTabs({
             transition={{ duration: 0.25 }}
           >
             <OurPlacesSection places={ourPlaces} />
+          </motion.div>
+        ) : null}
+
+        {tab === "gracias" ? (
+          <motion.div
+            key="gracias"
+            role="tabpanel"
+            id="panel-gracias"
+            aria-labelledby="tab-gracias"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <DoctorThanks data={doctorThanks} />
           </motion.div>
         ) : null}
 
