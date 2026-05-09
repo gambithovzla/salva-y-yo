@@ -13,7 +13,7 @@ export const galleryItems: GalleryItem[] = [
   { src: "/Salvador y Chely/chely embarazada exhbiendo barriga pintada con una bomba como broma.jpeg", caption: "Humor de mamá" },
   { src: "/Salvador y Chely/chey embarazada en ropa vinotinto.jpeg", caption: "Color vinotinto y promesa" },
   { src: "/Salvador y Chely/foto de la barriga embarazada de chely con osito de peluche al lado.jpeg", caption: "Osito esperando a Salvador" },
-  { src: "/Salvador y Chely/Chely y Salva esperando su cita en el ginecologo.jpeg", caption: "Esperando la cita: nervios y magia" },
+  { src: "/Salvador y Chely/Chely y Salva esperando su cita en el ginecologo.jpeg", caption: "Salvador con dos meses: nervios y magia" },
   { src: "/Salvador y Chely/foto de chely agarrando la mano de u esposo justo cuando esta dando a luz.jpeg", caption: "El momento en que todo cambia" },
   { src: "/Salvador y Chely/Nacimiento Salva.jpeg", caption: "El día que llegaste" },
   { src: "/Salvador y Chely/salvador en la incubadora con minutos de nacido.jpeg", caption: "Primeros minutos de vida" },

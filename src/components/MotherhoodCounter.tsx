@@ -17,7 +17,6 @@ export function MotherhoodCounter({ startIso }: { startIso: string }) {
   }, []);
 
   const elapsed = Math.max(0, now - startMs);
-  const totalSeconds = Math.floor(elapsed / 1000);
   const days = Math.floor(elapsed / (24 * 60 * 60 * 1000));
   const hours = Math.floor(
     (elapsed % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000),
@@ -25,14 +24,16 @@ export function MotherhoodCounter({ startIso }: { startIso: string }) {
   const minutes = Math.floor((elapsed % (60 * 60 * 1000)) / (60 * 1000));
   const seconds = Math.floor((elapsed % (60 * 1000)) / 1000);
 
+  /** Solo depende de días enteros de maternidad: cambia a lo sumo cada ~24 h, sin saltos cada segundo. */
   const whimsical = useMemo(() => {
     const d = Math.max(0, days);
+    const weeks = Math.floor(d / 7);
     return {
-      hugs: d * 8 + Math.floor(totalSeconds % 50),
-      songs: d * 2 + Math.floor(hours % 5),
-      calm: d * 4 + minutes,
+      hugs: Math.round(d * 5 + weeks * 3),
+      songs: Math.max(0, Math.floor(d / 4) + Math.floor(weeks / 2)),
+      calm: Math.round(d * 8 + weeks * 5),
     };
-  }, [days, hours, minutes, totalSeconds]);
+  }, [days]);
 
   const unitClass =
     "flex min-w-[4.5rem] flex-col items-center rounded-2xl bg-[var(--card)] px-4 py-4 shadow-sm ring-1 ring-[var(--sand)] backdrop-blur-sm";

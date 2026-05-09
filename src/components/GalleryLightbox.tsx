@@ -44,6 +44,36 @@ export function GalleryLightbox({
     if (hasNext) onChangeIndex(index + 1);
   }, [hasNext, index, onChangeIndex]);
 
+  /** Izquierda = atrás (prev), derecha = adelante (next). Solo gestos mayormente horizontales. */
+  const swipeStart = useRef<{ x: number; y: number } | null>(null);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const t = e.targetTouches[0];
+    swipeStart.current = { x: t.clientX, y: t.clientY };
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (!swipeStart.current) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - swipeStart.current.x;
+      const dy = t.clientY - swipeStart.current.y;
+      swipeStart.current = null;
+
+      const threshold = 48;
+      if (Math.abs(dx) < threshold) return;
+      if (Math.abs(dx) < Math.abs(dy) * 1.2) return;
+
+      if (dx < 0) goPrev();
+      else goNext();
+    },
+    [goPrev, goNext],
+  );
+
+  const handleTouchCancel = useCallback(() => {
+    swipeStart.current = null;
+  }, []);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -106,7 +136,12 @@ export function GalleryLightbox({
               <ChevronLeft className="h-7 w-7" aria-hidden />
             </button>
 
-            <div className="relative h-[min(78vh,calc(100dvh-10rem))] w-full min-w-0 max-w-5xl">
+            <div
+              className="relative h-[min(78vh,calc(100dvh-10rem))] w-full min-w-0 max-w-5xl touch-manipulation"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              onTouchCancel={handleTouchCancel}
+            >
               <Image
                 key={src}
                 src={src}

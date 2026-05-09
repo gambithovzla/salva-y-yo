@@ -16,7 +16,7 @@ const ORDERED = [
   ["chely embarazada exhbiendo barriga pintada con una bomba como broma.jpeg", "Humor de mamá"],
   ["chey embarazada en ropa vinotinto.jpeg", "Color vinotinto y promesa"],
   ["foto de la barriga embarazada de chely con osito de peluche al lado.jpeg", "Osito esperando a Salvador"],
-  ["Chely y Salva esperando su cita en el ginecologo.jpeg", "Esperando la cita: nervios y magia"],
+  ["Chely y Salva esperando su cita en el ginecologo.jpeg", "Salvador con dos meses: nervios y magia"],
   ["foto de chely agarrando la mano de u esposo justo cuando esta dando a luz.jpeg", "El momento en que todo cambia"],
   ["Nacimiento Salva.jpeg", "El día que llegaste"],
   ["salvador en la incubadora con minutos de nacido.jpeg", "Primeros minutos de vida"],
