@@ -18,6 +18,10 @@ export const siteCopy = {
   heroTitle: "Gracias por ser nuestra casa",
   heroLead:
     "Esta es una pequeña web hecha con amor para celebrarte: el tiempo que llevas siendo mamá, los momentos que guardamos y los regalos que nunca caducan.",
+  /** Pie de página — bloques para poder dar ritmo visual sin cambiar el mensaje. */
+  footerEmphasis: "Hecho con amor",
+  footerLead: "para los dos amores de mi vida:",
+  footerClosing: "mi compañera incondicional y mi hijo.",
 } as const;
 
 export type GalleryItem = {
@@ -55,6 +59,9 @@ export const songForSalvador: SongForSalvador = {
 
 /** Clip corto de la risa de Salvador — lo más entrañable de la página. */
 export type SalvadorLaughClip = {
+  /** Texto del sobre antes de abrirlo. */
+  envelopeTitle: string;
+  envelopeSubtitle: string;
   title: string;
   subtitle: string;
   hint: string;
@@ -63,6 +70,8 @@ export type SalvadorLaughClip = {
 };
 
 export const salvadorLaugh: SalvadorLaughClip = {
+  envelopeTitle: "El mejor sobre de todos",
+  envelopeSubtitle: "Para cuando sientas que te faltan fuerzas.",
   title: "La mejor risa del mundo",
   subtitle: "Es la risa de Salvador.",
   hint: "Toca el corazón y escucha lo más bonito que tenemos.",
@@ -85,6 +94,33 @@ export const letter = {
   signOff: "Con todo mi cariño,",
   signature: "Salvador & yo",
 } as const;
+
+/** Carta en primera persona de Salvador; firma simbólica (huella SVG) en el componente. */
+export type LetterFromSalvador = {
+  sectionTitle: string;
+  sectionEyebrow: string;
+  greeting: string;
+  paragraphs: readonly string[];
+  signOff: string;
+  signatureName: string;
+  scribeNote: string;
+};
+
+export const letterFromSalvador: LetterFromSalvador = {
+  sectionTitle: "Carta desde el futuro",
+  sectionEyebrow: "Escrita como Salvador",
+  greeting: "Mamá:",
+  paragraphs: [
+    "Todavía no sé escribir solito: las letras todavía no me caben en la mano. Pero papá me presta sus dedos para decirte algo que yo ya llevo adentro desde antes de tener palabras: tu olor es mi lugar favorito del mundo.",
+    "Cuando me acunas y la casa baja el volumen, yo solo sé que estoy bien. Tu voz me dibuja el sueño; tu pecho es mi mapa; tus manos son el idioma en el que entiendo, sin prisa, que estoy en casa.",
+    "Gracias por cada noche en vela que casi nadie ve, por el amor que no te sobra y aun así me das, y por enseñarme qué es querer sin pedirme nada a cambio.",
+    "Te amo. Un día, cuando mis manos sepan escribir solas, volveré a esta carta y te prometo recordarte lo mismo que hoy siento: que tú eres mi primer hogar.",
+  ],
+  signOff: "Con todo mi amor de bebé —el que todavía dice más con el abrazo que con las frases—,",
+  signatureName: "Salvador",
+  scribeNote:
+    "Dictado con los dedos de papá: las mías todavía están ocupadas agarrando el tuyo.",
+};
 
 export type Coupon = {
   id: string;
@@ -112,6 +148,28 @@ export const coupons: Coupon[] = [
     id: "massage",
     title: "Vale por masaje o autocuidado",
     detail: "Reservo el momento; tú solo tienes que llegar.",
+  },
+  {
+    id: "breakfast",
+    title: "Vale por desayuno en la cama o brunch sin reloj",
+    detail: "El día que digas: yo preparo, sirvo y recojo. Tú solo eliges qué te apetece.",
+  },
+  {
+    id: "movie-night",
+    title: "Vale por noche de películas a tu ritmo",
+    detail: "Tú eliges la lista; yo encargo el ambiente (y las pausas cuando Salvador lo necesite).",
+  },
+  {
+    id: "chores",
+    title: "Vale por ‘yo me encargo hoy’",
+    detail:
+      "Un día en el que yo me llevo las tareas que más te pesan: cocina, orden, lo que haga falta.",
+  },
+  {
+    id: "micro-escape",
+    title: "Vale por escapada corta o medio día solo para ti",
+    detail:
+      "Salón, café, caminar sin prisa… lo organizamos con tiempo y yo cubro lo que pueda en casa.",
   },
 ];
 

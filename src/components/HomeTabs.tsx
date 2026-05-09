@@ -15,6 +15,7 @@ import { useState } from "react";
 import {
   type Coupon,
   type GalleryItem,
+  type LetterFromSalvador as LetterFromSalvadorModel,
   doctorThanks,
   openWhenLetters,
   ourPlaces,
@@ -26,6 +27,7 @@ import { OurPlacesSection } from "@/components/OurPlacesSection";
 import { LoveCoupons } from "@/components/LoveCoupons";
 import { MotherhoodCounter } from "@/components/MotherhoodCounter";
 import { PhotoGallery } from "@/components/PhotoGallery";
+import { LetterFromSalvador } from "@/components/LetterFromSalvador";
 import { LetterSection } from "@/components/LetterSection";
 import { SongSection } from "@/components/SongSection";
 import { TwoMothersSection } from "@/components/TwoMothersSection";
@@ -64,6 +66,7 @@ type HomeTabsProps = {
   galleryItems: GalleryItem[];
   coupons: Coupon[];
   letter: Letter;
+  letterFromSalvador: LetterFromSalvadorModel;
 };
 
 export function HomeTabs({
@@ -71,6 +74,7 @@ export function HomeTabs({
   galleryItems,
   coupons,
   letter,
+  letterFromSalvador,
 }: HomeTabsProps) {
   const [tab, setTab] = useState<TabId>("momentos");
 
@@ -179,8 +183,10 @@ export function HomeTabs({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.25 }}
+            className="space-y-16"
           >
             <LetterSection letter={letter} />
+            <LetterFromSalvador letter={letterFromSalvador} />
           </motion.div>
         ) : null}
 
