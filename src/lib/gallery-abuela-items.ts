@@ -1,18 +1,10 @@
 /**
  * Galería exclusiva para la abuela — no enlazada desde la portada.
- * Fotos en public/Salvador y Chely/ (nombres con "abuela" / "abuelita").
+ * Imágenes y vídeos (.mp4) en public/Salvador y Chely/.
  */
 import type { GalleryItem } from "./site";
 
 export const abuelaGalleryItems: GalleryItem[] = [
-  {
-    src: "/Salvador y Chely/abuela de salva.jpeg",
-    caption: "Besos y miradas que guardamos",
-  },
-  {
-    src: "/Salvador y Chely/Abuela de Salvador riendo.jpeg",
-    caption: "Tu risa con él",
-  },
   {
     src: "/Salvador y Chely/mi abuela con las alas de angel que yo creo que si tiene.jpeg",
     caption: "Abuela de alas suaves",
@@ -72,5 +64,66 @@ export const abuelaGalleryItems: GalleryItem[] = [
   {
     src: "/Salvador y Chely/Salvador con papa, mama y abuela.jpeg",
     caption: "Los que lo rodeamos con amor",
+  },
+  /* —— Fotos nuevas (solo .jpeg; sin repetir rutas ya listadas arriba) —— */
+  {
+    src: "/Salvador y Chely/mi abuela cargandome desde chiquito.jpeg",
+    caption: "Cuando te cargaba desde chiquito",
+  },
+  {
+    src: "/Salvador y Chely/mi abuela conmigo en el parque chiquito.jpeg",
+    caption: "Parque, bien pequeño",
+  },
+  {
+    src: "/Salvador y Chely/mi abuela conmigo en navidad.jpeg",
+    caption: "Navidad juntos",
+  },
+  {
+    src: "/Salvador y Chely/mi abuela conmigo mi papa y mi mama.jpeg",
+    caption: "Todos en familia",
+  },
+  {
+    src: "/Salvador y Chely/mi abuela haciendo hallacas.jpeg",
+    caption: "Hallacas y hogar",
+  },
+  {
+    src: "/Salvador y Chely/mi abuela llevandome de paseo.jpeg",
+    caption: "De paseo contigo",
+  },
+  {
+    src: "/Salvador y Chely/mi abuela y mi mama besandome.jpeg",
+    caption: "Besos que abrazan",
+  },
+  {
+    src: "/Salvador y Chely/mi abuela abriendo el regalo de navidad que le di.mp4",
+    caption: "Abriendo tu regalo de Navidad",
+  },
+  {
+    src: "/Salvador y Chely/mi abuela bailando con mi perrita Laika.mp4",
+    caption: "Bailando con Laika",
+  },
+  {
+    src: "/Salvador y Chely/mi abuela enseñadome a tocar piano de juguete.mp4",
+    caption: "Enseñándome el piano de juguete",
+  },
+  {
+    src: "/Salvador y Chely/mi abuela hablandome cuando yo tenia como 3 semanas de nacido.mp4",
+    caption: "Hablándome con tres semanas",
+  },
+  {
+    src: "/Salvador y Chely/mi abuela hablandome tierno recien nacido.mp4",
+    caption: "Tierno, recién nacido",
+  },
+  {
+    src: "/Salvador y Chely/MI abuela jugando conmigo.mp4",
+    caption: "Jugando juntos",
+  },
+  {
+    src: "/Salvador y Chely/mi abuela siedno mi refugio cuando lloro.mp4",
+    caption: "Tu refugio cuando yo lloro",
+  },
+  {
+    src: "/Salvador y Chely/mi abuela siendo chistosa.mp4",
+    caption: "Tu risa chistosa",
   },
 ];

@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Heart, ImageIcon } from "lucide-react";
+import { Heart, ImageIcon, Play } from "lucide-react";
 import { useState } from "react";
 import type { GalleryItem } from "@/lib/site";
+import { gallerySrcIsVideo } from "@/lib/gallery-media";
 import { GalleryLightbox } from "./GalleryLightbox";
 
 export function PhotoGallery({ items }: { items: GalleryItem[] }) {
@@ -60,18 +61,45 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
             <button
               type="button"
               className="relative block w-full cursor-zoom-in text-left outline-none ring-[var(--accent)] ring-offset-2 ring-offset-[var(--cream)] transition focus-visible:ring-2"
-              aria-label={`Ampliar foto: ${item.caption}`}
+              aria-label={
+                gallerySrcIsVideo(item.src)
+                  ? `Ver vídeo: ${item.caption}`
+                  : `Ampliar foto: ${item.caption}`
+              }
               onClick={() => setLightboxIndex(i)}
             >
               <div className="relative aspect-[4/3] w-full bg-[var(--sand)]">
-                <Image
-                  src={encodeURI(item.src)}
-                  alt=""
-                  fill
-                  className="object-cover transition duration-500 group-hover:scale-[1.02]"
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                  priority={i < 2}
-                />
+                {gallerySrcIsVideo(item.src) ? (
+                  <>
+                    <video
+                      src={encodeURI(item.src)}
+                      muted
+                      playsInline
+                      preload="metadata"
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+                      aria-hidden
+                    />
+                    <span
+                      className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/25 transition group-hover:bg-black/35"
+                      aria-hidden
+                    >
+                      <Play
+                        className="h-14 w-14 text-white opacity-95 drop-shadow-md sm:h-16 sm:w-16"
+                        fill="currentColor"
+                        strokeWidth={0}
+                      />
+                    </span>
+                  </>
+                ) : (
+                  <Image
+                    src={encodeURI(item.src)}
+                    alt=""
+                    fill
+                    className="object-cover transition duration-500 group-hover:scale-[1.02]"
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                    priority={i < 2 && !gallerySrcIsVideo(item.src)}
+                  />
+                )}
               </div>
             </button>
             <figcaption className="flex items-center gap-2 px-5 py-4 text-sm text-[var(--ink)]">

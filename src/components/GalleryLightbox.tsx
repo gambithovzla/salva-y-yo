@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Heart, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { GalleryItem } from "@/lib/site";
+import { gallerySrcIsVideo } from "@/lib/gallery-media";
 
 type GalleryLightboxProps = {
   items: GalleryItem[];
@@ -22,6 +23,7 @@ export function GalleryLightbox({
 }: GalleryLightboxProps) {
   const [mounted, setMounted] = useState(false);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const item = items[index];
   const hasPrev = index > 0;
   const hasNext = index < items.length - 1;
@@ -88,9 +90,18 @@ export function GalleryLightbox({
     closeBtnRef.current?.focus();
   }, []);
 
+  useEffect(() => {
+    const v = videoRef.current;
+    if (v) {
+      v.pause();
+      v.currentTime = 0;
+    }
+  }, [index, item?.src]);
+
   if (!mounted || !item) return null;
 
   const src = encodeURI(item.src);
+  const isVideo = gallerySrcIsVideo(item.src);
 
   return createPortal(
     <motion.div
@@ -130,34 +141,46 @@ export function GalleryLightbox({
               type="button"
               disabled={!hasPrev}
               className="hidden shrink-0 rounded-full bg-white/10 p-3 text-white transition hover:bg-white/20 disabled:pointer-events-none disabled:opacity-30 sm:flex"
-              aria-label="Foto anterior"
+              aria-label="Anterior"
               onClick={goPrev}
             >
               <ChevronLeft className="h-7 w-7" aria-hidden />
             </button>
 
             <div
-              className="relative h-[min(78vh,calc(100dvh-10rem))] w-full min-w-0 max-w-5xl touch-manipulation"
+              className={`relative h-[min(78vh,calc(100dvh-10rem))] w-full min-w-0 max-w-5xl touch-manipulation ${isVideo ? "flex items-center justify-center bg-black/40" : ""}`}
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
               onTouchCancel={handleTouchCancel}
             >
-              <Image
-                key={src}
-                src={src}
-                alt={item.caption}
-                fill
-                className="object-contain"
-                sizes="100vw"
-                priority
-              />
+              {isVideo ? (
+                <video
+                  ref={videoRef}
+                  key={src}
+                  src={src}
+                  controls
+                  playsInline
+                  aria-label={item.caption}
+                  className="max-h-[min(78vh,calc(100dvh-10rem))] w-full max-w-full object-contain"
+                />
+              ) : (
+                <Image
+                  key={src}
+                  src={src}
+                  alt={item.caption}
+                  fill
+                  className="object-contain"
+                  sizes="100vw"
+                  priority
+                />
+              )}
             </div>
 
             <button
               type="button"
               disabled={!hasNext}
               className="hidden shrink-0 rounded-full bg-white/10 p-3 text-white transition hover:bg-white/20 disabled:pointer-events-none disabled:opacity-30 sm:flex"
-              aria-label="Foto siguiente"
+              aria-label="Siguiente"
               onClick={goNext}
             >
               <ChevronRight className="h-7 w-7" aria-hidden />
