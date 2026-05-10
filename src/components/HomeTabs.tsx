@@ -25,6 +25,7 @@ import { DoctorThanks } from "@/components/DoctorThanks";
 import { OpenWhenLetters } from "@/components/OpenWhenLetters";
 import { OurPlacesSection } from "@/components/OurPlacesSection";
 import { LoveCoupons } from "@/components/LoveCoupons";
+import { MotherhoodDaySnapshot } from "@/components/MotherhoodDaySnapshot";
 import { MotherhoodCounter } from "@/components/MotherhoodCounter";
 import { PhotoGallery } from "@/components/PhotoGallery";
 import { LetterFromSalvador } from "@/components/LetterFromSalvador";
@@ -125,6 +126,19 @@ export function HomeTabs({
             transition={{ duration: 0.25 }}
             className="space-y-24"
           >
+            <section
+              aria-labelledby="birth-sky-heading"
+              className="space-y-8"
+            >
+              <h2
+                id="birth-sky-heading"
+                className="text-center font-serif text-2xl text-[var(--ink)]"
+              >
+                El día en que te convertiste en mamá
+              </h2>
+              <MotherhoodDaySnapshot startIso={motherhoodStartIso} />
+            </section>
+
             <section aria-labelledby="counter-heading" className="space-y-8">
               <h2
                 id="counter-heading"
