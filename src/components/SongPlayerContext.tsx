@@ -17,7 +17,6 @@ export type SongPlayerContextValue = {
   song: SongForSalvador;
   playing: boolean;
   volumePct: number;
-  needsGesture: boolean;
   loadError: string | null;
   togglePlay: () => void;
   setVolumePct: (n: number) => void;
@@ -58,7 +57,6 @@ export function SongPlayerProvider({
   const [srcIndex, setSrcIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [volumePct, setVolumePctState] = useState(85);
-  const [needsGesture, setNeedsGesture] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
 
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -109,40 +107,56 @@ export function SongPlayerProvider({
   }, [src, candidates.length]);
 
   /**
-   * Autoplay: varios intentos (montaje, retardo, canplay) + primer gesto en la página.
-   * Muchos móviles bloquean audio hasta interacción explícita.
+   * Autoplay en bucle sin avisos: intentos al cargar, al volver a la pestaña/PWA y en cada gesto
+   * (sin mostrar UI si el navegador bloquea hasta que haya interacción).
    */
   useEffect(() => {
     const el = audioRef.current;
     if (!el || !src) return;
 
-    const tryPlay = async () => {
-      try {
-        await el.play();
-        setNeedsGesture(false);
-      } catch {
-        setNeedsGesture(true);
-      }
+    let lastTry = 0;
+    const tryPlay = () => {
+      if (!el.paused) return;
+      const now = Date.now();
+      if (now - lastTry < 250) return;
+      lastTry = now;
+      void el.play().catch(() => {
+        /* silencioso: políticas de autoplay */
+      });
     };
 
-    void tryPlay();
-    const retryTimer = window.setTimeout(() => void tryPlay(), 450);
+    void el.play().catch(() => {});
+    const retryTimer = window.setTimeout(() => tryPlay(), 450);
 
-    const onCanPlay = () => void tryPlay();
+    const onCanPlay = () => tryPlay();
     el.addEventListener("canplay", onCanPlay, { once: true });
     el.addEventListener("loadeddata", onCanPlay, { once: true });
 
-    const onFirstGesture = () => {
-      void tryPlay();
-      document.removeEventListener("pointerdown", onFirstGesture, true);
+    const onGesture = () => tryPlay();
+    document.addEventListener("pointerdown", onGesture, true);
+    document.addEventListener("touchstart", onGesture, {
+      capture: true,
+      passive: true,
+    });
+    document.addEventListener("keydown", onGesture, true);
+
+    const onVisible = () => {
+      if (document.visibilityState === "visible") tryPlay();
     };
-    document.addEventListener("pointerdown", onFirstGesture, true);
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("pageshow", tryPlay);
+    window.addEventListener("focus", tryPlay);
 
     return () => {
       window.clearTimeout(retryTimer);
       el.removeEventListener("canplay", onCanPlay);
       el.removeEventListener("loadeddata", onCanPlay);
-      document.removeEventListener("pointerdown", onFirstGesture, true);
+      document.removeEventListener("pointerdown", onGesture, true);
+      document.removeEventListener("touchstart", onGesture, true);
+      document.removeEventListener("keydown", onGesture, true);
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("pageshow", tryPlay);
+      window.removeEventListener("focus", tryPlay);
     };
   }, [src]);
 
@@ -155,10 +169,7 @@ export function SongPlayerProvider({
     if (!el) return;
     setLoadError(null);
     if (el.paused) {
-      void el
-        .play()
-        .then(() => setNeedsGesture(false))
-        .catch(() => setNeedsGesture(true));
+      void el.play().catch(() => {});
     } else {
       el.pause();
     }
@@ -173,7 +184,6 @@ export function SongPlayerProvider({
       song,
       playing,
       volumePct,
-      needsGesture,
       loadError,
       togglePlay,
       setVolumePct,
@@ -183,7 +193,6 @@ export function SongPlayerProvider({
       song,
       playing,
       volumePct,
-      needsGesture,
       loadError,
       togglePlay,
       setVolumePct,

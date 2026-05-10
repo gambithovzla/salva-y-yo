@@ -11,43 +11,6 @@ export function getMotherhoodStartIso(): string {
   );
 }
 
-/** Fecha larga en español (latino) sin depender del huso del navegador. */
-export function formatMotherhoodDateLongEs(iso: string): string {
-  const [y, m, d] = iso.slice(0, 10).split("-").map(Number);
-  if (!y || !m || !d) return iso.slice(0, 10);
-  const dt = new Date(Date.UTC(y, m - 1, d));
-  return new Intl.DateTimeFormat("es-419", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(dt);
-}
-
-/**
- * Cielo ese día (Luna: fuentes tipo timeanddate / tablas de fases; ciudades: timeanddate.com).
- * Si cambias NEXT_PUBLIC_MOTHERHOOD_START a otra fecha, actualiza `forCalendarDate` y los valores.
- */
-export const motherhoodBirthSkySnapshot = {
-  forCalendarDate: "2025-09-29",
-  moonPhaseLabel: "Cuarto creciente",
-  illuminationPct: 47,
-  moonAgeDays: 7.1,
-  nextFullMoonLabel: "6 de octubre de 2025",
-  caracas: {
-    label: "Caracas",
-    sunrise: "06:16",
-    sunset: "18:18",
-    dayLength: "12 h 03 min",
-  },
-  lima: {
-    label: "Lima",
-    sunrise: "05:52",
-    sunset: "18:04",
-    dayLength: "12 h 11 min",
-  },
-} as const;
-
 export const siteCopy = {
   pageTitle: "Para mamá — Salvador",
   shortName: "Mamá & Salvador",

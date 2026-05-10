@@ -10,7 +10,6 @@ export function SongSection() {
     song,
     playing,
     volumePct,
-    needsGesture,
     loadError,
     togglePlay,
     setVolumePct,
@@ -43,12 +42,6 @@ export function SongSection() {
           </div>
         </div>
 
-        {needsGesture ? (
-          <p className="mb-4 rounded-xl bg-[var(--sand)]/50 px-4 py-3 text-center text-sm text-[var(--muted)]">
-            Pulsa <strong className="text-[var(--ink)]">Reproducir</strong> para
-            escuchar: el navegador suele pedir un gesto antes de iniciar el audio.
-          </p>
-        ) : null}
         {loadError ? (
           <p className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-center text-sm text-red-800">
             {loadError}
