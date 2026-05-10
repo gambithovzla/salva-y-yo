@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "generate-icons": "node scripts/generate-icons.mjs",
+    "generate-favicon": "node scripts/generate-favicon.mjs",
     "generate-gallery": "node scripts/generate-gallery-items.mjs",
     "generate-qr-regalo": "node scripts/generate-mothers-day-qr.mjs"
   },

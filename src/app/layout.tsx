@@ -17,9 +17,10 @@ export const metadata: Metadata = {
     template: `%s · ${APP_NAME}`,
   },
   description: APP_DESCRIPTION,
+  /** `src/app/icon.png` y `apple-icon.png` — Next los enlaza; aquí reforzamos Apple / PWA. */
   icons: {
-    icon: "/icons/android-chrome-192x192.png",
-    apple: "/icons/android-chrome-192x192.png",
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: [{ url: "/icons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" }],
   },
   appleWebApp: {
     capable: true,
