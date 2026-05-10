@@ -73,7 +73,6 @@ export const galleryItems: GalleryItem[] = [
   { src: "/Salvador y Chely/chely y salva abrazados .jpeg", caption: "Abrazo que lo dice todo" },
   { src: "/Salvador y Chely/chely y salva en el ascensor 2.jpeg", caption: "Ascensor, segunda toma" },
   { src: "/Salvador y Chely/Chely y salva foto en el ascensor riendo.jpeg", caption: "Risas en el ascensor" },
-  { src: "/Salvador y Chely/chely y salva en el carro.jpeg", caption: "Viaje en carro" },
   { src: "/Salvador y Chely/salva con su abuela y chely en retaurante tanta, su primera salida a restaurant.jpeg", caption: "Primera vez en restaurante" },
   { src: "/Salvador y Chely/Chely y salva en un cumpleaños.jpeg", caption: "Cumpleaños en familia" },
   { src: "/Salvador y Chely/Hermosa foto de chely y salva en un cumpleaños.jpeg", caption: "Otro cumple, otra joya" },

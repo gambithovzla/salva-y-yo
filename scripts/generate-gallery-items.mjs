@@ -76,7 +76,6 @@ const ORDERED = [
   ["chely y salva abrazados .jpeg", "Abrazo que lo dice todo"],
   ["chely y salva en el ascensor 2.jpeg", "Ascensor, segunda toma"],
   ["Chely y salva foto en el ascensor riendo.jpeg", "Risas en el ascensor"],
-  ["chely y salva en el carro.jpeg", "Viaje en carro"],
   ["salva con su abuela y chely en retaurante tanta, su primera salida a restaurant.jpeg", "Primera vez en restaurante"],
   ["Chely y salva en un cumpleaños.jpeg", "Cumpleaños en familia"],
   ["Hermosa foto de chely y salva en un cumpleaños.jpeg", "Otro cumple, otra joya"],
