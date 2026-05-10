@@ -89,6 +89,26 @@ export const galleryItems: GalleryItem[] = [
   { src: "/Salvador y Chely/selfie de chely con salvador con capucha.jpeg", caption: "Selfie con capucha" },
   { src: "/Salvador y Chely/selfie salva y chely bistezando ambos.jpeg", caption: "Ambos bostezando" },
   { src: "/Salvador y Chely/Chely y Slava tomando biberon sonriendo.jpeg", caption: "Biberón y sonrisa" },
+  {
+    src: "/Salvador y Chely/salva con su mami previo a la cita con Yanara a los 3 meses.mp4",
+    caption: "Previo a la cita con Yanara",
+  },
+  {
+    src: "/Salvador y Chely/Salva con su mama en el canguro a los 4 meses.mp4",
+    caption: "Con mamá en el canguro",
+  },
+  {
+    src: "/Salvador y Chely/Mi mami jugando conmigo frente a la camara a los 4 meses.mp4",
+    caption: "Jugando frente a la cámara",
+  },
+  {
+    src: "/Salvador y Chely/Mi mami haciendome avioncito a los 5 meses.mp4",
+    caption: "Avioncito con mamá",
+  },
+  {
+    src: "/Salvador y Chely/Salva yendo a su consulta de 6 meses en el carro con estilo.mp4",
+    caption: "De camino a la consulta, con estilo",
+  },
   { src: "/Salvador y Chely/Salva comiendo a los 6 meses.jpeg", caption: "Seis meses descubriendo sabores" },
   { src: "/Salvador y Chely/Salva de 7 meses con sombrero de grogu star wars.jpeg", caption: "Siete meses, sombrero Grogu y pura ternura" },
   { src: "/Salvador y Chely/Salva simplemente siendo guapo 7 meses.jpeg", caption: "Siete meses de solo existir y enamorar" },
@@ -99,5 +119,17 @@ export const galleryItems: GalleryItem[] = [
   {
     src: "/Salvador y Chely/Mi mami disfrutando conmigo en la fiesta de Emilia.jpeg",
     caption: "Mi mami disfrutando conmigo en la fiesta de Emilia",
+  },
+  {
+    src: "/Salvador y Chely/Disfrutando con mi mami que me metio dentro de una burbuja de jabon en la fiesta de emilia a mis 7 meses.mp4",
+    caption: "Burbuja de jabón con mamá en la fiesta de Emilia",
+  },
+  {
+    src: "/Salvador y Chely/Jugando a las espadas con mi amigo benjamin y su mami.mp4",
+    caption: "Espadas con Benjamín y su mamá",
+  },
+  {
+    src: "/Salvador y Chely/finalizando la fiesta de emilia jugando topo topo con mi amigo benjamin.mp4",
+    caption: "Topo topo con Benjamín al final de la fiesta",
   },
 ];
