@@ -97,14 +97,12 @@ export function SongPlayerProvider({
 
     el.addEventListener("play", onPlay);
     el.addEventListener("pause", onPause);
-    el.addEventListener("ended", onPause);
     el.addEventListener("loadeddata", onLoaded);
     el.addEventListener("error", onError);
 
     return () => {
       el.removeEventListener("play", onPlay);
       el.removeEventListener("pause", onPause);
-      el.removeEventListener("ended", onPause);
       el.removeEventListener("loadeddata", onLoaded);
       el.removeEventListener("error", onError);
     };
@@ -197,6 +195,7 @@ export function SongPlayerProvider({
     <SongPlayerContext.Provider value={value}>
       <audio
         ref={audioRef}
+        loop
         preload="auto"
         playsInline
         className="absolute h-px w-px overflow-hidden opacity-0"
