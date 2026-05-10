@@ -76,10 +76,19 @@ export function OpenWhenLetters({ items }: { items: OpenWhenLetter[] }) {
                       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
                       className="overflow-hidden border-t border-[var(--sand)]"
                     >
-                      <div className="px-4 pb-5 pt-3 sm:px-5">
-                        <p className="font-serif text-lg leading-relaxed text-[var(--ink)]">
-                          {item.message}
-                        </p>
+                      <div className="space-y-4 px-4 pb-5 pt-3 sm:px-5">
+                        {item.message
+                          .split(/\n\s*\n/)
+                          .map((p) => p.trim())
+                          .filter(Boolean)
+                          .map((para, i) => (
+                            <p
+                              key={i}
+                              className="whitespace-pre-line font-serif text-base leading-relaxed text-[var(--ink)] sm:text-lg"
+                            >
+                              {para}
+                            </p>
+                          ))}
                       </div>
                     </motion.div>
                   ) : null}

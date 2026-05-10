@@ -213,62 +213,143 @@ export const openWhenLetters: OpenWhenLetter[] = [
   {
     id: "abrazo",
     trigger: "Ábrelo cuando necesites un abrazo",
-    message:
-      "Aquí va uno enorme, sin soltar pronto. No tienes que pedir permiso para necesitar calor humano.",
+    message: `Aquí hay uno enorme esperándote, de esos que sostienen sin apuro y hacen sentir que todo va a estar bien.
+
+No tienes que pedir permiso para necesitar cariño, descanso o un poco de calor humano. Incluso las personas más fuertes necesitan un lugar donde sentirse cuidadas.
+
+Y cuando eso pase, recuerda esto: siempre tendrás nuestros brazos, nuestro amor y este hogar para volver a respirar tranquila.`,
   },
   {
     id: "por-que-te-elegi",
-    trigger: "Ábrelo cuando quieras saber por qué te elegí",
-    message:
-      "Por tu risa honesta, tu fuerza silenciosa y cómo haces hogar donde sea que estemos. Te elijo cada día.",
+    trigger: "Ábrelo cuando quieras recordar por qué te elegí",
+    message: `Te elegí por tu risa sincera, esa que vuelve liviano hasta el día más difícil.
+Por tu manera de amar sin hacer ruido, pero dejando huellas en todo lo que tocas.
+Por tu fuerza tranquila, la que sostiene incluso cuando nadie la ve.
+
+Te elegí porque contigo cualquier lugar se siente hogar.
+Porque aún en el cansancio sigues teniendo ternura.
+Y porque desde que llegaste a mi vida, nunca más me sentí solo.
+
+No fue una elección de un momento.
+Es una decisión que mi corazón vuelve a tomar, todos los días.`,
   },
   {
     id: "suficiente",
     trigger: "Ábrelo cuando sientas que no eres suficiente",
-    message:
-      "Lo eres más de lo que ves en los días cansados. Salvador y yo tenemos la suerte de tenerte; eso no es casualidad.",
+    message: `En los días cansados es fácil olvidar todo lo que haces, todo lo que sostienes y todo el amor que entregas incluso cuando ya no te queda energía. Pero quiero que recuerdes algo: tú ya eres suficiente, incluso en tus días más difíciles.
+
+No necesitas hacerlo perfecto para ser una mamá maravillosa.
+No necesitas tener todas las respuestas para ser el lugar más seguro de nuestro mundo.
+
+Salvador y yo tenemos la inmensa suerte de tenerte. Y eso no es casualidad.
+Porque tu amor se nota en cada abrazo, en cada desvelo, en cada pequeño gesto que llena esta casa de calma.
+
+A veces tú solo ves el cansancio.
+Nosotros vemos a la mujer que sostiene una familia con el corazón.`,
   },
   {
     id: "dia-dificil",
     trigger: "Ábrelo cuando tengas un día difícil",
-    message:
-      "Respira. Ya sobreviviste al 100 % de tus malos días hasta hoy. Descansa cuando puedas; nosotros te cubrimos lo que podamos.",
+    message: `Respira un momento, amor. No tienes que cargar el mundo entero tú sola.
+
+Ya sobreviviste al 100 % de los días que pensaste que te iban a romper. Y aun así, aquí sigues: amando, cuidando y sosteniendo esta familia incluso cuando estás cansada.
+
+Está bien si hoy no puedes con todo.
+Está bien si necesitas descansar, llorar un rato o simplemente quedarte en silencio.
+
+Nosotros también queremos cuidarte.
+Déjanos abrazarte, ayudarte y recordarte que no tienes que ser fuerte todo el tiempo.
+
+Y si hoy el día pesa demasiado, recuerda esto: para Salvador y para mí, sigues siendo el lugar más bonito al que volver.`,
   },
   {
     id: "reir",
     trigger: "Ábrelo cuando quieras reírte un rato",
-    message:
-      "Piensa en Salvador haciendo alguna travesura y en una de tus risas que me desarma. Vuelve pronto a esta carta.",
+    message: `Imagínate a Salvador haciendo una de sus futuras travesuras: seguramente con cara de inocente mientras destruye algo importante. Y después imagínanos a nosotros tratando de mantener la seriedad… sin lograrlo.
+
+Ahora piensa en tu risa. Sí, esa que empieza chiquita y termina contagiándolo todo. La misma que me desarma incluso en los días más pesados.
+
+Hay algo muy bonito en cómo te ríes: por un momento, todo parece más simple y más vivo.
+
+Así que vuelve pronto a esta carta cuando necesites un respiro.
+Prometo seguir buscando maneras de hacerte sonreír, aunque sea diciendo tonterías o sobreviviendo juntos al caos hermoso de ser papás.`,
   },
   {
     id: "calma",
     trigger: "Ábrelo cuando extrañes la calma",
-    message:
-      "La calma volverá en oleadas pequeñas: un té, una ventana abierta, tres respiraciones tuyas. Yo guardo tu espacio.",
+    message: `La calma no siempre vuelve de golpe. A veces regresa despacito: en un té caliente entre el ruido, en una ventana abierta dejando entrar aire nuevo, en tres respiraciones profundas mientras el mundo se queda quieto por un instante.
+
+No te exijas encontrar paz todo el tiempo. También está bien atravesar días desordenados, cansados o llenos de ruido.
+
+Y mientras vuelves a ti poquito a poquito, quiero que recuerdes esto: yo sigo guardando tu espacio.
+El lugar donde puedes descansar, bajar la guardia y simplemente ser tú, sin tener que poder con todo.
+
+La calma volverá.
+Y cuando llegue, espero estar ahí abrazándote mientras entra otra vez a nuestra vida.`,
   },
   {
     id: "orgullo",
     trigger: "Ábrelo cuando quieras recordar lo orgulloso que estoy de ti",
-    message:
-      "Estoy orgulloso de cómo amas, de cómo aguantas lo que nadie ve y de la mamá increíble que eres.",
+    message: `Estoy orgulloso de ti de una forma que a veces no sé explicar con palabras.
+
+Orgulloso de cómo amas incluso cuando estás agotada.
+De cómo sigues adelante en silencio, sosteniendo cosas que muchas veces nadie nota.
+De cada noche difícil que atravesaste por Salvador, de cada abrazo tuyo que convirtió el miedo en tranquilidad.
+
+Te veo más de lo que crees.
+Veo el esfuerzo detrás de tu sonrisa, la paciencia detrás del cansancio y el amor inmenso con el que cuidas nuestra familia todos los días.
+
+Y sí, también estoy orgulloso de la mamá en la que te convertiste.
+Porque Salvador no solo tiene una gran mamá: tiene una mujer valiente, tierna y extraordinaria a quien admirar toda la vida.`,
   },
   {
     id: "increible",
     trigger: "Ábrelo cuando necesites oír que eres increíble",
-    message:
-      "Lo eres. No por ser perfecta, sino por ser real, presente y nuestra.",
+    message: `Lo eres. Y no porque tengas que hacerlo todo perfecto, ni porque nunca te canses, ni porque siempre tengas respuestas para todo.
+
+Eres increíble porque amas de verdad.
+Porque estás presente incluso en los días difíciles.
+Porque haces sentir hogar a las personas que amas.
+
+Hay algo profundamente hermoso en tu manera de cuidar, de abrazar, de quedarte. En cómo sigues dando amor aun cuando el cansancio pesa.
+
+Salvador y yo no necesitamos una mujer perfecta.
+Te necesitamos a ti: real, imperfecta, tierna, fuerte… nuestra.
+
+Y créeme, eso vale muchísimo más que cualquier perfección del mundo.`,
   },
   {
     id: "medianoche",
     trigger: "Ábrelo cuando sea medianoche y pienses en nosotros",
-    message:
-      "Si el reloj marca tarde y nos tienes en la cabeza: es porque nuestra historia sigue encendida. Imagina una risa suave en la oscuridad y la misma luna mirándonos a todos. También estamos pensando en ti, con un cariño que no se apaga.",
+    message: `Si alguna noche el reloj marca tarde y nosotros aparecemos en tu mente, no lo ignores. Hay amores que incluso en silencio siguen haciendo luz dentro del corazón.
+
+Imagínanos ahí contigo: una risa bajita en medio de la oscuridad, Salvador dormido en paz y yo pensando en lo afortunados que somos de tenerte en nuestras vidas.
+
+Tal vez el mundo esté callado a esa hora, pero nuestra historia sigue despierta.
+Sigue viva en los recuerdos que construimos, en los abrazos que nos esperan y en todo lo que todavía nos falta vivir juntos.
+
+Mira la luna un instante.
+Quizá nosotros también la estamos mirando al mismo tiempo, pensando en ti con el mismo amor tranquilo que nunca se apaga.`,
   },
   {
     id: "gracias",
     trigger: "Ábrelo cuando quieras que te diga gracias otra vez",
-    message:
-      "Gracias por cada noche en vela, cada gesto de amor y por decir sí a esta familia una y mil veces.",
+    message: `Gracias.
+Otra vez, y las veces que hagan falta.
+
+Gracias por cada noche en vela en la que pusiste el amor por encima del cansancio.
+Por cada abrazo que calmó a Salvador.
+Por cada pequeño gesto que sostiene esta familia incluso cuando nadie lo nota.
+
+Gracias por seguir eligiéndonos en los días fáciles y también en los difíciles.
+Por decirle “sí” a esta vida juntos una y mil veces, incluso cuando daba miedo, incluso cuando todo era nuevo.
+
+A veces quizás sientas que haces cosas pequeñas.
+Pero desde este lado, lo que haces se ve enorme.
+Porque construyes hogar en cada detalle.
+
+Y quiero que nunca dudes de esto:
+nuestra vida es más bonita porque tú estás en ella.`,
   },
 ];
 
