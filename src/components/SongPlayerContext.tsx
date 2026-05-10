@@ -111,7 +111,8 @@ export function SongPlayerProvider({
   }, [src, candidates.length]);
 
   /**
-   * Autoplay: intento al montar / al cambiar fuente, canplay, y primer gesto.
+   * Autoplay: varios intentos (montaje, retardo, canplay) + primer gesto en la página.
+   * Muchos móviles bloquean audio hasta interacción explícita.
    */
   useEffect(() => {
     const el = audioRef.current;
@@ -127,11 +128,11 @@ export function SongPlayerProvider({
     };
 
     void tryPlay();
+    const retryTimer = window.setTimeout(() => void tryPlay(), 450);
 
-    const onCanPlay = () => {
-      void tryPlay();
-    };
+    const onCanPlay = () => void tryPlay();
     el.addEventListener("canplay", onCanPlay, { once: true });
+    el.addEventListener("loadeddata", onCanPlay, { once: true });
 
     const onFirstGesture = () => {
       void tryPlay();
@@ -140,7 +141,9 @@ export function SongPlayerProvider({
     document.addEventListener("pointerdown", onFirstGesture, true);
 
     return () => {
+      window.clearTimeout(retryTimer);
       el.removeEventListener("canplay", onCanPlay);
+      el.removeEventListener("loadeddata", onCanPlay);
       document.removeEventListener("pointerdown", onFirstGesture, true);
     };
   }, [src]);

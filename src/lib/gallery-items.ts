@@ -94,4 +94,10 @@ export const galleryItems: GalleryItem[] = [
   { src: "/Salvador y Chely/Salva simplemente siendo guapo 7 meses.jpeg", caption: "Siete meses de solo existir y enamorar" },
   { src: "/Salvador y Chely/Salva y sus primos en el parque 7 meses.jpeg", caption: "Primos y parque con siete meses de vida" },
   { src: "/Salvador y Chely/Salva con capucha en el coche sonriendo a la camara 7 meses.jpeg", caption: "Capucha, coche y sonrisa para la cámara" },
+  { src: "/Salvador y Chely/Salva en la fiesta de Emilia.jpeg", caption: "Salva en la fiesta de Emilia" },
+  { src: "/Salvador y Chely/mi mami conmigo en la fiesta de emilia.jpeg", caption: "Mi mami conmigo en la fiesta de Emilia" },
+  {
+    src: "/Salvador y Chely/Mi mami disfrutando conmigo en la fiesta de Emilia.jpeg",
+    caption: "Mi mami disfrutando conmigo en la fiesta de Emilia",
+  },
 ];

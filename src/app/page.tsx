@@ -1,5 +1,6 @@
 import { HeroSection } from "@/components/HeroSection";
 import { HomeTabs } from "@/components/HomeTabs";
+import { MusicGestureHint } from "@/components/MusicGestureHint";
 import { SalvadorLaugh } from "@/components/SalvadorLaugh";
 import { ScrollFloatDecor } from "@/components/ScrollFloatDecor";
 import { SongPlayerProvider } from "@/components/SongPlayerContext";
@@ -33,6 +34,7 @@ export default function Home() {
       />
 
       <SongPlayerProvider song={songForSalvador}>
+        <MusicGestureHint />
         <div className="relative z-10">
           <HomeTabs
             motherhoodStartIso={motherhoodStartIso}

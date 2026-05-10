@@ -15,9 +15,13 @@ export const siteCopy = {
   pageTitle: "Para mamá — Salvador",
   shortName: "Mamá & Salvador",
   heroEyebrow: "Tu primer Día de la Madre",
-  heroTitle: "Gracias por ser nuestra casa",
-  heroLead:
-    "Esta es una pequeña web hecha con amor para celebrarte: el tiempo que llevas siendo mamá, los momentos que guardamos y los regalos que nunca caducan.",
+  heroTitle: "Gracias por convertirte en el corazón de nuestro hogar",
+  heroLead: `Esta pequeña web nació para celebrarte:
+las noches que entregaste sin pedir nada,
+los recuerdos que ya empezamos a construir
+y el amor inmenso con el que le diste un hogar a nuestra familia.
+
+Aquí guardamos momentos, palabras y regalos que el tiempo no podrá borrar jamás.`,
   /** Pie de página — bloques para poder dar ritmo visual sin cambiar el mensaje. */
   footerEmphasis: "Hecho con amor",
   footerLead: "para los dos amores de mi vida:",
@@ -113,20 +117,23 @@ export const letter = {
   signature: "el padre de Salvador",
 } as const;
 
-/** Carta en primera persona de Salvador; firma simbólica (huella SVG) en el componente. */
+/** Carta en primera persona de Salvador; foto circular opcional sobre la firma. */
 export type LetterFromSalvador = {
   sectionTitle: string;
+  /** Si está vacío, no se muestra línea superior. */
   sectionEyebrow: string;
   greeting: string;
   paragraphs: readonly string[];
   signOff: string;
   signatureName: string;
   scribeNote: string;
+  /** Miniatura circular (p. ej. recién nacido “tres días”). */
+  signaturePhotoSrc: string;
 };
 
 export const letterFromSalvador: LetterFromSalvador = {
   sectionTitle: "Carta desde el futuro",
-  sectionEyebrow: "Escrita como Salvador",
+  sectionEyebrow: "",
   greeting: "Mamá:",
   paragraphs: [
     "Todavía no sé escribir con mis propias manos. Apenas estoy aprendiendo a agarrar el mundo poquito a poquito. Por eso hoy papá me presta las suyas, para decirte algo que yo ya siento desde antes de entender las palabras: contigo todo se siente seguro.",
@@ -140,6 +147,8 @@ export const letterFromSalvador: LetterFromSalvador = {
   signatureName: "Salvador",
   scribeNote:
     "Dictado con los dedos de papá, porque los míos todavía están demasiado ocupados descubriendo el mundo.",
+  signaturePhotoSrc:
+    "/Salvador y Chely/Salvador con su foto mas hermosa de recien nacido, durmiendo, 3 dias de nacido.jpeg",
 };
 
 export type Coupon = {

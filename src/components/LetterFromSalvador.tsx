@@ -1,60 +1,17 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import type { LetterFromSalvador as LetterFromSalvadorData } from "@/lib/site";
-
-/** Huella estilizada en SVG (firma simbólica), color heredado del texto. */
-function SignatureFingerprint({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 72 92"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden
-      focusable="false"
-    >
-      <ellipse
-        cx="36"
-        cy="38"
-        rx="26"
-        ry="30"
-        stroke="currentColor"
-        strokeWidth="1.15"
-        opacity="0.22"
-      />
-      <g
-        stroke="currentColor"
-        strokeWidth="1.05"
-        strokeLinecap="round"
-        opacity="0.85"
-      >
-        <path d="M36 12c4 6 2 14-1 20" />
-        <path d="M22 22c2 8 8 12 14 10" opacity="0.75" />
-        <path d="M50 24c-2 9-10 14-16 12" opacity="0.75" />
-        <path d="M18 38c4 10 14 14 22 10" opacity="0.7" />
-        <path d="M54 40c-3 11-15 16-24 12" opacity="0.7" />
-        <path d="M24 52c6 8 16 8 22 2" opacity="0.65" />
-        <path d="M48 54c-4 8-12 10-18 6" opacity="0.65" />
-        <path d="M30 64c5 5 12 4 16-2" opacity="0.55" />
-        <path d="M34 72c3 3 8 2 10-2" opacity="0.45" />
-      </g>
-      <path
-        d="M36 78v10"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        opacity="0.35"
-      />
-    </svg>
-  );
-}
+import { encodePublicPath } from "@/lib/public-url";
 
 export function LetterFromSalvador({
   letter,
 }: {
   letter: LetterFromSalvadorData;
 }) {
+  const photoSrc = encodePublicPath(letter.signaturePhotoSrc);
+
   return (
     <motion.section
       id="carta-desde-el-futuro"
@@ -74,9 +31,11 @@ export function LetterFromSalvador({
       />
 
       <header className="relative mb-10 text-center sm:mb-12">
-        <p className="mb-2 font-sans text-[0.7rem] font-medium uppercase tracking-[0.28em] text-[var(--accent)]">
-          {letter.sectionEyebrow}
-        </p>
+        {letter.sectionEyebrow.trim() ? (
+          <p className="mb-2 font-sans text-[0.7rem] font-medium uppercase tracking-[0.28em] text-[var(--accent)]">
+            {letter.sectionEyebrow}
+          </p>
+        ) : null}
         <h2 className="font-serif text-[1.65rem] leading-tight text-[var(--ink)] sm:text-3xl">
           {letter.sectionTitle}
         </h2>
@@ -97,8 +56,16 @@ export function LetterFromSalvador({
             {letter.signOff}
           </p>
 
-          <div className="mt-10 flex flex-col items-center gap-4 text-[var(--accent)]">
-            <SignatureFingerprint className="h-[5.5rem] w-[4.5rem] shrink-0 sm:h-24 sm:w-20" />
+          <div className="mt-10 flex flex-col items-center gap-5 text-[var(--accent)]">
+            <div className="relative h-[7.25rem] w-[7.25rem] shrink-0 overflow-hidden rounded-full bg-[var(--sand)] shadow-[0_12px_40px_-16px_rgba(90,60,50,0.35)] ring-4 ring-[var(--accent)]/30 ring-offset-4 ring-offset-[var(--cream)] sm:h-32 sm:w-32">
+              <Image
+                src={photoSrc}
+                alt="Salvador, tres días"
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 7.25rem, 8rem"
+              />
+            </div>
             <p className="font-serif text-3xl text-[var(--ink)] sm:text-4xl">
               {letter.signatureName}
             </p>
