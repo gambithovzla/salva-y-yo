@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
-import { addUploadedPhoto } from "@/lib/gallery-store";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +12,12 @@ export const dynamic = "force-dynamic";
  *
  * El navegador manda la contraseña y el caption en `clientPayload`; aquí
  * validamos la contraseña antes de emitir el token.
+ *
+ * Nota: NO usamos `onUploadCompleted`. Ese webhook haría que Blob llamara de
+ * vuelta a este dominio al terminar; si el dominio está detrás de un filtro
+ * anti-bots (responde 403 a peticiones automáticas), la subida se quedaría
+ * colgada esperando esa confirmación. En su lugar, el navegador registra la
+ * foto con una llamada directa a POST /api/gallery tras subirla.
  */
 export async function POST(request: Request): Promise<NextResponse> {
   const body = (await request.json()) as HandleUploadBody;
@@ -34,9 +39,6 @@ export async function POST(request: Request): Promise<NextResponse> {
           throw new Error("Contraseña incorrecta.");
         }
 
-        const caption =
-          typeof payload.caption === "string" ? payload.caption.trim() : "";
-
         return {
           allowedContentTypes: [
             "image/jpeg",
@@ -46,26 +48,7 @@ export async function POST(request: Request): Promise<NextResponse> {
           ],
           addRandomSuffix: true,
           maximumSizeInBytes: 25 * 1024 * 1024,
-          // Disponible en onUploadCompleted (solo se ejecuta en producción).
-          tokenPayload: JSON.stringify({ caption }),
         };
-      },
-      onUploadCompleted: async ({ blob, tokenPayload }) => {
-        // En producción Vercel llama aquí cuando la subida termina. Lo usamos
-        // como red de seguridad: registra la foto aunque el cliente fallara al
-        // llamar a /api/gallery. (No se ejecuta en localhost.)
-        let caption = "";
-        try {
-          const parsed = tokenPayload ? JSON.parse(tokenPayload) : {};
-          if (typeof parsed.caption === "string") caption = parsed.caption;
-        } catch {
-          caption = "";
-        }
-        await addUploadedPhoto({
-          url: blob.url,
-          pathname: blob.pathname,
-          caption,
-        });
       },
     });
 

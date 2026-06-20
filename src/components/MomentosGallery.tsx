@@ -101,6 +101,7 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [caption, setCaption] = useState("");
   const [status, setStatus] = useState<"idle" | "uploading" | "done">("idle");
+  const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -164,11 +165,21 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
     }
 
     setStatus("uploading");
+    setProgress(0);
+
+    // Red de seguridad: si la subida se cuelga (red lenta o intermitente),
+    // la abortamos a los 2 minutos en lugar de quedarnos en "Subiendo…".
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 120_000);
+
     try {
       const blob = await upload(sanitizePathname(file.name), file, {
         access: "public",
         handleUploadUrl: "/api/gallery/upload",
         clientPayload: JSON.stringify({ password, caption }),
+        abortSignal: controller.signal,
+        onUploadProgress: ({ percentage }) =>
+          setProgress(Math.round(percentage)),
       });
 
       const res = await fetch("/api/gallery", {
@@ -199,7 +210,10 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
       const message =
         err instanceof Error ? err.message : "No se pudo subir la foto.";
       let friendly = message || "No se pudo subir la foto.";
-      if (/contrase/i.test(message)) {
+      if (controller.signal.aborted) {
+        friendly =
+          "La subida tardó demasiado y se canceló. Revisa tu conexión e inténtalo de nuevo.";
+      } else if (/contrase/i.test(message)) {
         friendly = "Contraseña incorrecta.";
       } else if (/client token|token/i.test(message)) {
         // La librería de Blob muestra este texto genérico tanto si la
@@ -209,6 +223,8 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
       }
       setError(friendly);
       setStatus("idle");
+    } finally {
+      clearTimeout(timeout);
     }
   }
 
@@ -339,7 +355,9 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
             {busy ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-                Subiendo…
+                {progress > 0 && progress < 100
+                  ? `Subiendo… ${progress}%`
+                  : "Subiendo…"}
               </>
             ) : status === "done" ? (
               "¡Foto añadida!"
