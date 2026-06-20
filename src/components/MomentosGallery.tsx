@@ -1,7 +1,7 @@
 "use client";
 
 import { upload } from "@vercel/blob/client";
-import { ImagePlus, Loader2, Lock, X } from "lucide-react";
+import { Eye, EyeOff, ImagePlus, Loader2, Lock, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { GalleryItem } from "@/lib/site";
 import { PhotoGallery } from "./PhotoGallery";
@@ -9,6 +9,55 @@ import { PhotoGallery } from "./PhotoGallery";
 const PASSWORD_STORAGE_KEY = "salva-gallery-pwd";
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_BYTES = 25 * 1024 * 1024;
+/** Lado máximo (px) al que reducimos la foto antes de subir. */
+const MAX_DIMENSION = 1920;
+/** Calidad JPEG de la foto reducida. */
+const JPEG_QUALITY = 0.82;
+
+/**
+ * Reduce la foto en el navegador antes de subirla: una foto de móvil pesa
+ * varios MB y por red móvil tarda o se cuelga; reducida a ~1920px y JPEG queda
+ * en unos cientos de KB y sube en uno o dos segundos. Si algo falla (o es un
+ * GIF animado), se sube el archivo original tal cual.
+ */
+async function compressImage(file: File): Promise<File> {
+  if (file.type === "image/gif") return file;
+  if (typeof createImageBitmap !== "function") return file;
+
+  try {
+    const bitmap = await createImageBitmap(file, {
+      imageOrientation: "from-image",
+    });
+    const scale = Math.min(
+      1,
+      MAX_DIMENSION / Math.max(bitmap.width, bitmap.height),
+    );
+    const width = Math.round(bitmap.width * scale);
+    const height = Math.round(bitmap.height * scale);
+
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      bitmap.close();
+      return file;
+    }
+    ctx.drawImage(bitmap, 0, 0, width, height);
+    bitmap.close();
+
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob((b) => resolve(b), "image/jpeg", JPEG_QUALITY),
+    );
+    // Si por lo que sea no mejora, nos quedamos con el original.
+    if (!blob || blob.size >= file.size) return file;
+
+    const baseName = file.name.replace(/\.[^.]+$/, "") || "foto";
+    return new File([blob], `${baseName}.jpg`, { type: "image/jpeg" });
+  } catch {
+    return file;
+  }
+}
 
 /**
  * Galería de "Momentos" con subida estilo Instagram.
@@ -97,6 +146,7 @@ function readSavedPassword(): string {
 
 function UploadModal({ onClose, onUploaded }: UploadModalProps) {
   const [password, setPassword] = useState(readSavedPassword);
+  const [showPassword, setShowPassword] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [caption, setCaption] = useState("");
@@ -104,10 +154,30 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const controllerRef = useRef<AbortController | null>(null);
+
+  /** Guarda la contraseña según se escribe, para no tener que repetirla. */
+  function changePassword(value: string) {
+    setPassword(value);
+    try {
+      window.localStorage.setItem(PASSWORD_STORAGE_KEY, value);
+    } catch {
+      /* localStorage no disponible */
+    }
+  }
+
+  /** Cierra el modal; si hay una subida en curso, la cancela. */
+  function handleClose() {
+    controllerRef.current?.abort();
+    onClose();
+  }
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && status !== "uploading") onClose();
+      if (e.key === "Escape") {
+        controllerRef.current?.abort();
+        onClose();
+      }
     };
     window.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
@@ -116,7 +186,7 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
     };
-  }, [onClose, status]);
+  }, [onClose]);
 
   // Libera el object URL de la vista previa al desmontar.
   useEffect(() => {
@@ -170,17 +240,17 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
     // Red de seguridad: si la subida se cuelga (red lenta o intermitente),
     // la abortamos a los 3 minutos en lugar de quedarnos en "Subiendo…".
     const controller = new AbortController();
+    controllerRef.current = controller;
     const timeout = setTimeout(() => controller.abort(), 180_000);
 
     try {
-      const blob = await upload(sanitizePathname(file.name), file, {
+      // Reduce la foto antes de subir (mucho más rápido y fiable en móvil).
+      const toUpload = await compressImage(file);
+
+      const blob = await upload(sanitizePathname(toUpload.name), toUpload, {
         access: "public",
         handleUploadUrl: "/api/gallery/upload",
         clientPayload: JSON.stringify({ password, caption }),
-        // Subida por partes: trocea la foto y sube cada parte por separado,
-        // reintentando las que fallen. Mucho más robusto en redes móviles que
-        // un único envío grande (que tiende a colgarse a media transferencia).
-        multipart: true,
         abortSignal: controller.signal,
         onUploadProgress: ({ percentage }) =>
           setProgress(Math.round(percentage)),
@@ -229,6 +299,7 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
       setStatus("idle");
     } finally {
       clearTimeout(timeout);
+      controllerRef.current = null;
     }
   }
 
@@ -245,7 +316,7 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
         type="button"
         className="absolute inset-0 bg-[rgba(20,18,16,0.7)] backdrop-blur-[2px]"
         aria-label="Cerrar"
-        onClick={() => !busy && onClose()}
+        onClick={handleClose}
       />
 
       <form
@@ -261,10 +332,9 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
           </h3>
           <button
             type="button"
-            onClick={() => !busy && onClose()}
+            onClick={handleClose}
             className="rounded-full p-1.5 text-[var(--muted)] transition hover:bg-[var(--sand)]/60 hover:text-[var(--ink)]"
             aria-label="Cerrar"
-            disabled={busy}
           >
             <X className="h-5 w-5" aria-hidden />
           </button>
@@ -276,14 +346,30 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
               <Lock className="h-3.5 w-3.5 text-[var(--accent)]" aria-hidden />
               Contraseña
             </span>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              className="w-full rounded-xl border border-[var(--sand)] bg-[var(--cream)] px-3 py-2.5 text-sm text-[var(--ink)] outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]"
-              placeholder="Tu contraseña secreta"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => changePassword(e.target.value)}
+                autoComplete="current-password"
+                className="w-full rounded-xl border border-[var(--sand)] bg-[var(--cream)] px-3 py-2.5 pr-11 text-sm text-[var(--ink)] outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]"
+                placeholder="Tu contraseña secreta"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute inset-y-0 right-0 flex items-center px-3 text-[var(--muted)] transition hover:text-[var(--ink)]"
+                aria-label={
+                  showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                }
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" aria-hidden />
+                ) : (
+                  <Eye className="h-4 w-4" aria-hidden />
+                )}
+              </button>
+            </div>
           </label>
 
           <div>
