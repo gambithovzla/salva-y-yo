@@ -26,7 +26,7 @@ import { OpenWhenLetters } from "@/components/OpenWhenLetters";
 import { OurPlacesSection } from "@/components/OurPlacesSection";
 import { LoveCoupons } from "@/components/LoveCoupons";
 import { MotherhoodCounter } from "@/components/MotherhoodCounter";
-import { PhotoGallery } from "@/components/PhotoGallery";
+import { MomentosGallery } from "@/components/MomentosGallery";
 import { LetterFromSalvador } from "@/components/LetterFromSalvador";
 import { LetterSection } from "@/components/LetterSection";
 import { SongSection } from "@/components/SongSection";
@@ -142,7 +142,7 @@ export function HomeTabs({
               >
                 Momentos guardados
               </h2>
-              <PhotoGallery items={galleryItems} />
+              <MomentosGallery staticItems={galleryItems} />
             </section>
           </motion.div>
         ) : null}
