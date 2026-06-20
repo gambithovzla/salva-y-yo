@@ -87,7 +87,16 @@ export async function addUploadedPhoto(
   return entry;
 }
 
-/** Convierte una foto subida al formato que consume la galería. */
+/**
+ * Convierte una foto subida al formato que consume la galería.
+ *
+ * El store de Blob es privado, así que la imagen no se sirve por su URL directa
+ * sino a través de nuestro proxy /api/gallery/img (que la lee con el token del
+ * servidor). `pathname` lleva sufijo aleatorio único, por eso se puede cachear.
+ */
 export function uploadedPhotoToGalleryItem(photo: UploadedPhoto): GalleryItem {
-  return { src: photo.url, caption: photo.caption };
+  return {
+    src: `/api/gallery/img?path=${encodeURIComponent(photo.pathname)}`,
+    caption: photo.caption,
+  };
 }

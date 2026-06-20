@@ -76,8 +76,10 @@ export async function POST(request: Request): Promise<NextResponse> {
 
   try {
     const fallbackExt = file.type === "image/png" ? "png" : "jpg";
+    // El store es privado; guardamos privado y servimos las fotos a través de
+    // /api/gallery/img (ver gallery-store + ese route handler).
     const blob = await put(sanitizePathname(file.name, fallbackExt), file, {
-      access: "public",
+      access: "private",
       addRandomSuffix: true,
       contentType: file.type,
     });

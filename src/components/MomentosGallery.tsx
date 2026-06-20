@@ -170,7 +170,9 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [caption, setCaption] = useState("");
-  const [status, setStatus] = useState<"idle" | "uploading" | "done">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "compressing" | "uploading" | "saving" | "done"
+  >("idle");
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -254,7 +256,7 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
       return;
     }
 
-    setStatus("uploading");
+    setStatus("compressing");
     setProgress(0);
 
     // Red de seguridad: si la subida se cuelga (red lenta o intermitente),
@@ -272,9 +274,14 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
       form.append("caption", caption);
       form.append("password", password);
 
+      setStatus("uploading");
       const res = await postFormWithProgress("/api/gallery/upload", form, {
         signal: controller.signal,
-        onProgress: (p) => setProgress(Math.round(p)),
+        onProgress: (p) => {
+          setProgress(Math.round(p));
+          // Cuando termina de subir el archivo, esperamos al servidor.
+          if (p >= 100) setStatus("saving");
+        },
       });
       if (!res.ok) {
         throw new Error(res.data?.error ?? "No se pudo subir la foto.");
@@ -309,7 +316,8 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
     }
   }
 
-  const busy = status === "uploading";
+  const busy =
+    status === "compressing" || status === "uploading" || status === "saving";
 
   return (
     <div
@@ -451,9 +459,13 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
             {busy ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-                {progress > 0 && progress < 100
-                  ? `Subiendo… ${progress}%`
-                  : "Subiendo…"}
+                {status === "compressing"
+                  ? "Preparando foto…"
+                  : status === "saving"
+                    ? "Guardando…"
+                    : progress > 0 && progress < 100
+                      ? `Subiendo… ${progress}%`
+                      : "Subiendo…"}
               </>
             ) : status === "done" ? (
               "¡Foto añadida!"
