@@ -198,12 +198,16 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "No se pudo subir la foto.";
-      // El endpoint lanza este texto cuando la contraseña falla.
-      setError(
-        /contrase/i.test(message)
-          ? "Contraseña incorrecta."
-          : message || "No se pudo subir la foto.",
-      );
+      let friendly = message || "No se pudo subir la foto.";
+      if (/contrase/i.test(message)) {
+        friendly = "Contraseña incorrecta.";
+      } else if (/client token|token/i.test(message)) {
+        // La librería de Blob muestra este texto genérico tanto si la
+        // contraseña es incorrecta como si falta la configuración del store.
+        friendly =
+          "No se pudo conectar con el almacenamiento. Revisa que la contraseña sea correcta y que el sitio tenga configurado Vercel Blob (BLOB_READ_WRITE_TOKEN).";
+      }
+      setError(friendly);
       setStatus("idle");
     }
   }
