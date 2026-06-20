@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight, Heart, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { GalleryItem } from "@/lib/site";
-import { gallerySrcIsVideo } from "@/lib/gallery-media";
+import { gallerySrcIsVideo, gallerySrcUrl } from "@/lib/gallery-media";
 
 type GalleryLightboxProps = {
   items: GalleryItem[];
@@ -100,7 +100,7 @@ export function GalleryLightbox({
 
   if (!mounted || !item) return null;
 
-  const src = encodeURI(item.src);
+  const src = gallerySrcUrl(item.src);
   const isVideo = gallerySrcIsVideo(item.src);
 
   return createPortal(

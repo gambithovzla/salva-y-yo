@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Heart, ImageIcon, Play } from "lucide-react";
 import { useState } from "react";
 import type { GalleryItem } from "@/lib/site";
-import { gallerySrcIsVideo } from "@/lib/gallery-media";
+import { gallerySrcIsVideo, gallerySrcUrl } from "@/lib/gallery-media";
 import { GalleryLightbox } from "./GalleryLightbox";
 
 export function PhotoGallery({ items }: { items: GalleryItem[] }) {
@@ -72,7 +72,7 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
                 {gallerySrcIsVideo(item.src) ? (
                   <>
                     <video
-                      src={encodeURI(item.src)}
+                      src={gallerySrcUrl(item.src)}
                       muted
                       playsInline
                       preload="metadata"
@@ -92,7 +92,7 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
                   </>
                 ) : (
                   <Image
-                    src={encodeURI(item.src)}
+                    src={gallerySrcUrl(item.src)}
                     alt=""
                     fill
                     className="object-cover transition duration-500 group-hover:scale-[1.02]"
