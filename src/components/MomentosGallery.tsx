@@ -168,15 +168,19 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
     setProgress(0);
 
     // Red de seguridad: si la subida se cuelga (red lenta o intermitente),
-    // la abortamos a los 2 minutos en lugar de quedarnos en "Subiendo…".
+    // la abortamos a los 3 minutos en lugar de quedarnos en "Subiendo…".
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 120_000);
+    const timeout = setTimeout(() => controller.abort(), 180_000);
 
     try {
       const blob = await upload(sanitizePathname(file.name), file, {
         access: "public",
         handleUploadUrl: "/api/gallery/upload",
         clientPayload: JSON.stringify({ password, caption }),
+        // Subida por partes: trocea la foto y sube cada parte por separado,
+        // reintentando las que fallen. Mucho más robusto en redes móviles que
+        // un único envío grande (que tiende a colgarse a media transferencia).
+        multipart: true,
         abortSignal: controller.signal,
         onUploadProgress: ({ percentage }) =>
           setProgress(Math.round(percentage)),
