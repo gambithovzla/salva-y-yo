@@ -1,6 +1,5 @@
 "use client";
 
-import { upload } from "@vercel/blob/client";
 import { Eye, EyeOff, ImagePlus, Loader2, Lock, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { GalleryItem } from "@/lib/site";
@@ -115,19 +114,40 @@ export function MomentosGallery({
   );
 }
 
-function sanitizePathname(fileName: string): string {
-  const dot = fileName.lastIndexOf(".");
-  const rawExt = dot > 0 ? fileName.slice(dot + 1).toLowerCase() : "jpg";
-  const ext = /^[a-z0-9]{2,5}$/.test(rawExt) ? rawExt : "jpg";
-  const base =
-    (dot > 0 ? fileName.slice(0, dot) : fileName)
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .slice(0, 40) || "foto";
-  return `fotos-familia/${base}.${ext}`;
+type UploadResult = { ok: boolean; status: number; data: { item?: GalleryItem; error?: string } };
+
+/**
+ * POST con FormData usando XHR para poder mostrar progreso de subida real
+ * (fetch no expone el progreso de subida) y poder cancelar con AbortSignal.
+ */
+function postFormWithProgress(
+  url: string,
+  form: FormData,
+  options: { signal: AbortSignal; onProgress: (percentage: number) => void },
+): Promise<UploadResult> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+    xhr.responseType = "json";
+
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) options.onProgress((e.loaded / e.total) * 100);
+    };
+    xhr.onload = () => {
+      const data = (xhr.response ?? {}) as UploadResult["data"];
+      resolve({
+        ok: xhr.status >= 200 && xhr.status < 300,
+        status: xhr.status,
+        data,
+      });
+    };
+    xhr.onerror = () => reject(new Error("Error de red al subir la foto."));
+    xhr.onabort = () =>
+      reject(new DOMException("Subida cancelada", "AbortError"));
+
+    options.signal.addEventListener("abort", () => xhr.abort(), { once: true });
+    xhr.send(form);
+  });
 }
 
 type UploadModalProps = {
@@ -247,37 +267,23 @@ function UploadModal({ onClose, onUploaded }: UploadModalProps) {
       // Reduce la foto antes de subir (mucho más rápido y fiable en móvil).
       const toUpload = await compressImage(file);
 
-      const blob = await upload(sanitizePathname(toUpload.name), toUpload, {
-        access: "public",
-        handleUploadUrl: "/api/gallery/upload",
-        clientPayload: JSON.stringify({ password, caption }),
-        abortSignal: controller.signal,
-        onUploadProgress: ({ percentage }) =>
-          setProgress(Math.round(percentage)),
-      });
+      const form = new FormData();
+      form.append("file", toUpload);
+      form.append("caption", caption);
+      form.append("password", password);
 
-      const res = await fetch("/api/gallery", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          url: blob.url,
-          pathname: blob.pathname,
-          caption,
-          password,
-        }),
+      const res = await postFormWithProgress("/api/gallery/upload", form, {
+        signal: controller.signal,
+        onProgress: (p) => setProgress(Math.round(p)),
       });
-      const data = await res.json();
       if (!res.ok) {
-        throw new Error(data?.error ?? "No se pudo guardar la foto.");
+        throw new Error(res.data?.error ?? "No se pudo subir la foto.");
+      }
+      if (!res.data.item) {
+        throw new Error("Respuesta inesperada del servidor.");
       }
 
-      try {
-        window.localStorage.setItem(PASSWORD_STORAGE_KEY, password);
-      } catch {
-        /* ignore */
-      }
-
-      onUploaded(data.item as GalleryItem);
+      onUploaded(res.data.item);
       setStatus("done");
       setTimeout(onClose, 700);
     } catch (err) {
