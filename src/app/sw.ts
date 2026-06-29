@@ -28,7 +28,11 @@ const serwist = new Serwist({
   clientsClaim: true,
   runtimeCaching: [
     {
-      matcher: () => true,
+      // SOLO interceptamos descargas (GET) y las dejamos pasar a la red sin
+      // cachear. Las subidas (POST a /api/gallery/upload) y borrados (DELETE)
+      // NO se interceptan: si el SW se mete en una subida con XHR, la rompe
+      // con "error en la red". Dejándolas pasar nativas, la subida funciona.
+      matcher: ({ request }) => request.method === "GET",
       handler: new NetworkOnly(),
     },
   ],
