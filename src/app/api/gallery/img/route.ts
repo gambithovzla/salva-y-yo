@@ -19,18 +19,29 @@ export async function GET(request: Request): Promise<Response> {
   }
 
   try {
-    const result = await get(path, { access: "private" });
+    // useCache:false: leemos del origen, no de la CDN. Justo tras subir una
+    // foto la CDN puede no tenerla todavía y devolver 404.
+    const result = await get(path, { access: "private", useCache: false });
     if (!result || !result.stream) {
       return new Response("Not found", { status: 404 });
     }
 
-    return new Response(result.stream, {
+    // Bufferizamos la imagen en lugar de reenviar el stream tal cual: así la
+    // respuesta lleva Content-Length y evitamos rarezas de re-streaming que
+    // dejaban la foto sin cargar en algunos casos.
+    const bytes = await new Response(result.stream).arrayBuffer();
+
+    return new Response(bytes, {
       headers: {
         "Content-Type": result.blob.contentType ?? "image/jpeg",
+        "Content-Length": String(bytes.byteLength),
         "Cache-Control": "public, max-age=31536000, immutable",
       },
     });
-  } catch {
+  } catch (error) {
+    // Dejamos rastro en los logs del servidor para poder diagnosticar, pero
+    // al navegador solo le devolvemos un 404 limpio.
+    console.error("[gallery/img] No se pudo servir la foto:", path, error);
     return new Response("Not found", { status: 404 });
   }
 }

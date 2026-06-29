@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Heart, ImageIcon, Play } from "lucide-react";
+import { Heart, ImageIcon, Loader2, Play, Trash2 } from "lucide-react";
 import { useState } from "react";
 import type { GalleryItem } from "@/lib/site";
 import {
@@ -12,8 +12,16 @@ import {
 } from "@/lib/gallery-media";
 import { GalleryLightbox } from "./GalleryLightbox";
 
-export function PhotoGallery({ items }: { items: GalleryItem[] }) {
+export function PhotoGallery({
+  items,
+  onDelete,
+}: {
+  items: GalleryItem[];
+  /** Si se pasa, las fotos subidas muestran un botón para borrarlas. */
+  onDelete?: (item: GalleryItem) => void | Promise<void>;
+}) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   if (items.length === 0) {
     return (
@@ -56,12 +64,36 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
         {items.map((item, i) => (
           <motion.figure
             key={item.src}
-            className="group overflow-hidden rounded-3xl bg-[var(--card)] shadow-sm ring-1 ring-[var(--sand)] backdrop-blur-sm"
+            className="group relative overflow-hidden rounded-3xl bg-[var(--card)] shadow-sm ring-1 ring-[var(--sand)] backdrop-blur-sm"
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ delay: i * 0.08 }}
           >
+            {onDelete && gallerySrcIsUploaded(item.src) ? (
+              <button
+                type="button"
+                disabled={deleting === item.src}
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  setDeleting(item.src);
+                  try {
+                    await onDelete(item);
+                  } finally {
+                    setDeleting(null);
+                  }
+                }}
+                className="absolute right-3 top-3 z-10 rounded-full bg-black/45 p-2 text-white shadow-sm backdrop-blur-sm transition hover:bg-black/65 disabled:opacity-60"
+                aria-label="Borrar foto"
+              >
+                {deleting === item.src ? (
+                  <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                ) : (
+                  <Trash2 className="h-4 w-4" aria-hidden />
+                )}
+              </button>
+            ) : null}
+
             <button
               type="button"
               className="relative block w-full cursor-zoom-in text-left outline-none ring-[var(--accent)] ring-offset-2 ring-offset-[var(--cream)] transition focus-visible:ring-2"
