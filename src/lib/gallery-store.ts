@@ -112,16 +112,19 @@ export async function removeUploadedPhoto(pathname: string): Promise<boolean> {
  * sino a través de nuestro proxy /api/gallery/img (que la lee con el token del
  * servidor).
  *
- * El marcador final `&sw=1` es importante: sin él la URL terminaba en `.jpg`
- * y el service worker la trataba como imagen estática, cacheándola 30 días
- * (StaleWhileRevalidate). Si se cacheaba una respuesta rota, la foto seguía
- * sin verse por más que se recargara. Con el marcador, la URL ya no termina
- * en una extensión de imagen, así que el SW la sirve como API (NetworkFirst):
- * siempre intenta la red primero. Subir el número invalida cachés antiguas.
+ * IMPORTANTE: dejamos las barras "/" del pathname SIN codificar. Si se codifican
+ * como `%2F` (lo que hace encodeURIComponent del pathname completo), Vercel
+ * devuelve 404 y la imagen sale rota. Con la barra literal —igual que al abrir
+ * la URL del proxy a mano, que sí funciona— la imagen se sirve bien. Por eso
+ * codificamos cada segmento por separado y los unimos con "/".
  */
 export function uploadedPhotoToGalleryItem(photo: UploadedPhoto): GalleryItem {
+  const safePath = photo.pathname
+    .split("/")
+    .map(encodeURIComponent)
+    .join("/");
   return {
-    src: `/api/gallery/img?path=${encodeURIComponent(photo.pathname)}&sw=1`,
+    src: `/api/gallery/img?path=${safePath}`,
     caption: photo.caption,
   };
 }
