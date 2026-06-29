@@ -15,13 +15,25 @@ import { GalleryLightbox } from "./GalleryLightbox";
 export function PhotoGallery({
   items,
   onDelete,
+  pageSize,
 }: {
   items: GalleryItem[];
   /** Si se pasa, las fotos subidas muestran un botón para borrarlas. */
   onDelete?: (item: GalleryItem) => void | Promise<void>;
+  /**
+   * Si se pasa, solo se muestran al principio `pageSize` fotos y aparece un
+   * botón "Ver más" que revela más de tanto en tanto. Evita tener que bajar
+   * por toda la galería de una sola vez.
+   */
+  pageSize?: number;
 }) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(pageSize ?? items.length);
+
+  // Las fotos que se muestran ahora mismo (todas, salvo que haya paginación).
+  const visible = pageSize ? items.slice(0, visibleCount) : items;
+  const hasMore = visible.length < items.length;
 
   if (items.length === 0) {
     return (
@@ -61,7 +73,7 @@ export function PhotoGallery({
   return (
     <>
       <div className="grid gap-6 sm:grid-cols-2">
-        {items.map((item, i) => (
+        {visible.map((item, i) => (
           <motion.figure
             key={item.src}
             className="group relative overflow-hidden rounded-3xl bg-[var(--card)] shadow-sm ring-1 ring-[var(--sand)] backdrop-blur-sm"
@@ -150,9 +162,26 @@ export function PhotoGallery({
         ))}
       </div>
 
+      {hasMore ? (
+        <div className="mt-8 flex justify-center">
+          <button
+            type="button"
+            onClick={() =>
+              setVisibleCount((c) => c + (pageSize ?? items.length))
+            }
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--sand)] bg-[var(--card)] px-5 py-2.5 text-sm font-medium text-[var(--ink)] shadow-sm transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          >
+            Ver más fotos
+            <span className="text-[var(--muted)]">
+              ({items.length - visible.length})
+            </span>
+          </button>
+        </div>
+      ) : null}
+
       {lightboxIndex !== null ? (
         <GalleryLightbox
-          items={items}
+          items={visible}
           index={lightboxIndex}
           onClose={() => setLightboxIndex(null)}
           onChangeIndex={setLightboxIndex}

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { list } from "@vercel/blob";
+import { get, list } from "@vercel/blob";
+import { readUploadedPhotos } from "@/lib/gallery-store";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,41 @@ export async function GET() {
     }
   }
 
+  // Prueba de extremo a extremo: leer el manifiesto y, si hay fotos, intentar
+  // descargar la primera con el mismo get() que usa el proxy /api/gallery/img.
+  // Así sabemos exactamente por qué una foto se ve o no se ve.
+  const imageTest: Record<string, unknown> = { ran: false };
+  try {
+    const photos = await readUploadedPhotos();
+    imageTest.ran = true;
+    imageTest.manifestPhotoCount = photos.length;
+    const first = photos[0];
+    if (first) {
+      imageTest.firstPathname = first.pathname;
+      try {
+        const result = await get(first.pathname, {
+          access: "private",
+          useCache: false,
+        });
+        if (!result || !result.stream) {
+          imageTest.getResult = "not-found (get devolvió null)";
+        } else {
+          const bytes = await new Response(result.stream).arrayBuffer();
+          imageTest.getResult = "ok";
+          imageTest.contentType = result.blob.contentType;
+          imageTest.byteLength = bytes.byteLength;
+        }
+      } catch (error) {
+        imageTest.getResult = "error";
+        imageTest.getError =
+          error instanceof Error ? error.message : "Error desconocido";
+      }
+    }
+  } catch (error) {
+    imageTest.manifestError =
+      error instanceof Error ? error.message : "Error desconocido";
+  }
+
   const ready = hasPassword && blobReachable;
 
   return NextResponse.json(
@@ -49,6 +85,7 @@ export async function GET() {
         blobReachable,
         blobError,
       },
+      imageTest,
       diagnostics: {
         vercelEnv: process.env.VERCEL_ENV ?? null,
         tokenVarName,

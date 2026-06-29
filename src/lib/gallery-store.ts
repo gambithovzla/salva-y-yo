@@ -110,11 +110,18 @@ export async function removeUploadedPhoto(pathname: string): Promise<boolean> {
  *
  * El store de Blob es privado, así que la imagen no se sirve por su URL directa
  * sino a través de nuestro proxy /api/gallery/img (que la lee con el token del
- * servidor). `pathname` lleva sufijo aleatorio único, por eso se puede cachear.
+ * servidor).
+ *
+ * El marcador final `&sw=1` es importante: sin él la URL terminaba en `.jpg`
+ * y el service worker la trataba como imagen estática, cacheándola 30 días
+ * (StaleWhileRevalidate). Si se cacheaba una respuesta rota, la foto seguía
+ * sin verse por más que se recargara. Con el marcador, la URL ya no termina
+ * en una extensión de imagen, así que el SW la sirve como API (NetworkFirst):
+ * siempre intenta la red primero. Subir el número invalida cachés antiguas.
  */
 export function uploadedPhotoToGalleryItem(photo: UploadedPhoto): GalleryItem {
   return {
-    src: `/api/gallery/img?path=${encodeURIComponent(photo.pathname)}`,
+    src: `/api/gallery/img?path=${encodeURIComponent(photo.pathname)}&sw=1`,
     caption: photo.caption,
   };
 }
