@@ -1,66 +1,46 @@
 /// <reference lib="webworker" />
-import { defaultCache } from "@serwist/turbopack/worker";
-import type { PrecacheEntry, RuntimeCaching, SerwistGlobalConfig } from "serwist";
+import type { SerwistGlobalConfig } from "serwist";
 import { NetworkOnly, Serwist } from "serwist";
 
 declare global {
-  interface WorkerGlobalScope extends SerwistGlobalConfig {
-    __SW_MANIFEST: (PrecacheEntry | string)[] | undefined;
-  }
+  interface WorkerGlobalScope extends SerwistGlobalConfig {}
 }
 
 declare const self: ServiceWorkerGlobalScope;
 
 /**
- * La galería de fotos subidas (subir, listar, servir imágenes privadas,
- * diagnóstico) es contenido dinámico que SIEMPRE debe ir a la red. El service
- * worker no debe cachear ni interceptar nada bajo /api/gallery: hacerlo dejaba
- * fotos rotas "pegadas" en caché y hacía que /api/gallery/status devolviera un
- * 404 del app-shell en vez del JSON real. NetworkOnly va primero para ganarle
- * a las reglas de defaultCache.
+ * Service worker neutralizado (pasa-todo a la red).
+ *
+ * Historia: el SW anterior cacheaba la galería y, al meterse entre el
+ * navegador y nuestro proxy de imágenes (/api/gallery/img), servía versiones
+ * viejas/rotas de las fotos subidas. El servidor entrega las fotos perfecto
+ * (se comprueba abriendo la URL del proxy directamente), pero el SW las rompía.
+ *
+ * Este SW ya NO cachea nada: todo va directo a la red, igual que si no hubiera
+ * service worker. Además, al activarse borra TODAS las cachés que el SW viejo
+ * hubiera dejado, para soltar cualquier foto "fantasma" pegada. Renunciamos al
+ * modo offline (este sitio se usa con conexión) a cambio de que siempre se vea
+ * la versión real y correcta.
  */
-const runtimeCaching: RuntimeCaching[] = [
-  {
-    matcher: ({ url, sameOrigin }) =>
-      sameOrigin && url.pathname.startsWith("/api/gallery"),
-    handler: new NetworkOnly(),
-  },
-  ...defaultCache,
-];
-
 const serwist = new Serwist({
-  precacheEntries: self.__SW_MANIFEST,
+  precacheEntries: [],
   skipWaiting: true,
   clientsClaim: true,
-  navigationPreload: true,
-  runtimeCaching,
-  fallbacks: {
-    entries: [
-      {
-        url: "/offline",
-        matcher({ request }) {
-          return request.destination === "document";
-        },
-      },
-    ],
-  },
+  runtimeCaching: [
+    {
+      matcher: () => true,
+      handler: new NetworkOnly(),
+    },
+  ],
 });
 
 serwist.addEventListeners();
 
-/**
- * Al activarse este service worker, borra las cachés de runtime que pudieran
- * tener respuestas viejas de la galería: una lista `/api/gallery` cacheada
- * (que mostraba "fotos fantasma" que ya no existen en el servidor) y las
- * imágenes que antes se cacheaban como estáticas. Así el usuario no tiene que
- * limpiar nada a mano: al actualizarse el SW, la galería parte de cero limpia.
- */
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
-      for (const name of ["apis", "static-image-assets"]) {
-        await caches.delete(name).catch(() => {});
-      }
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => caches.delete(key)));
     })(),
   );
 });
