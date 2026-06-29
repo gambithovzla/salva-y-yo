@@ -75,7 +75,10 @@ export function MomentosGallery({
 
   useEffect(() => {
     let active = true;
-    fetch("/api/gallery")
+    // Marca de tiempo única + no-store: garantiza que pedimos la lista REAL al
+    // servidor y nunca una versión vieja de caché (ni del service worker). Sin
+    // esto, una respuesta cacheada mostraba "fotos fantasma" que ya no existen.
+    fetch(`/api/gallery?t=${Date.now()}`, { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : { items: [] }))
       .then((data) => {
         if (active && Array.isArray(data.items)) setUploaded(data.items);
