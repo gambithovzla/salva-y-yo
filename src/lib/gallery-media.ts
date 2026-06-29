@@ -22,3 +22,15 @@ export function gallerySrcUrl(src: string): string {
 export function gallerySrcIsUploaded(src: string): boolean {
   return src.startsWith("/api/gallery/img");
 }
+
+/**
+ * Extrae el `pathname` del blob a partir del src del proxy
+ * (/api/gallery/img?path=...). Devuelve null si no es una foto subida.
+ * Sirve para identificar la foto al borrarla.
+ */
+export function galleryUploadedPathname(src: string): string | null {
+  if (!gallerySrcIsUploaded(src)) return null;
+  const q = src.indexOf("?");
+  if (q === -1) return null;
+  return new URLSearchParams(src.slice(q + 1)).get("path");
+}

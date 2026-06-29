@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
-import { addUploadedPhoto, uploadedPhotoToGalleryItem } from "@/lib/gallery-store";
+import {
+  addUploadedPhoto,
+  removeUploadedPhoto,
+  uploadedPhotoToGalleryItem,
+} from "@/lib/gallery-store";
 
 export const dynamic = "force-dynamic";
 
@@ -114,6 +118,59 @@ export async function POST(request: Request): Promise<NextResponse> {
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message ?? "No se pudo guardar la foto." },
+      { status: 500 },
+    );
+  }
+}
+
+/**
+ * DELETE /api/gallery/upload  (JSON: { pathname, password })
+ *
+ * Borra una foto subida (quita la entrada del manifiesto y elimina el blob).
+ * Pide la misma contraseña que la subida.
+ */
+export async function DELETE(request: Request): Promise<NextResponse> {
+  let body: { pathname?: unknown; password?: unknown };
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Solicitud inválida." }, { status: 400 });
+  }
+
+  const passwordCheck = checkPassword(
+    typeof body.password === "string" ? body.password : null,
+  );
+  if (passwordCheck === "unconfigured") {
+    return NextResponse.json(
+      { error: "La galería aún no está configurada en el servidor." },
+      { status: 503 },
+    );
+  }
+  if (passwordCheck === "invalid") {
+    return NextResponse.json(
+      { error: "Contraseña incorrecta." },
+      { status: 401 },
+    );
+  }
+
+  const pathname = typeof body.pathname === "string" ? body.pathname : "";
+  // Solo permitimos borrar fotos de la galería, nunca rutas arbitrarias.
+  if (!pathname.startsWith("fotos-familia/")) {
+    return NextResponse.json({ error: "Foto no válida." }, { status: 400 });
+  }
+
+  try {
+    const removed = await removeUploadedPhoto(pathname);
+    if (!removed) {
+      return NextResponse.json(
+        { error: "La foto ya no existe." },
+        { status: 404 },
+      );
+    }
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    return NextResponse.json(
+      { error: (error as Error).message ?? "No se pudo borrar la foto." },
       { status: 500 },
     );
   }

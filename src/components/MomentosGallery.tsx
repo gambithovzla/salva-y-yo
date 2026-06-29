@@ -3,6 +3,7 @@
 import { Eye, EyeOff, ImagePlus, Loader2, Lock, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { GalleryItem } from "@/lib/site";
+import { galleryUploadedPathname } from "@/lib/gallery-media";
 import { PhotoGallery } from "./PhotoGallery";
 
 const PASSWORD_STORAGE_KEY = "salva-gallery-pwd";
@@ -93,6 +94,35 @@ export function MomentosGallery({
   // invertimos aquí para mostrarlas de la más antigua a la más nueva.
   const items = [...staticItems, ...[...uploaded].reverse()];
 
+  /** Borra una foto subida (pide la misma contraseña que para subirla). */
+  async function handleDelete(item: GalleryItem) {
+    const pathname = galleryUploadedPathname(item.src);
+    if (!pathname) return;
+    if (!window.confirm("¿Seguro que quieres borrar esta foto?")) return;
+
+    let pwd = readSavedPassword();
+    if (!pwd) {
+      pwd = window.prompt("Escribe la contraseña para borrar la foto:") ?? "";
+      if (!pwd) return;
+    }
+
+    try {
+      const res = await fetch("/api/gallery/upload", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pathname, password: pwd }),
+      });
+      if (res.ok) {
+        setUploaded((prev) => prev.filter((p) => p.src !== item.src));
+      } else {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        window.alert(data.error ?? "No se pudo borrar la foto.");
+      }
+    } catch {
+      window.alert("No se pudo borrar la foto. Revisa tu conexión.");
+    }
+  }
+
   return (
     <div className="space-y-8">
       <div className="flex justify-center">
@@ -106,7 +136,7 @@ export function MomentosGallery({
         </button>
       </div>
 
-      <PhotoGallery items={items} />
+      <PhotoGallery items={items} onDelete={handleDelete} />
 
       {open ? (
         <UploadModal

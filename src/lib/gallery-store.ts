@@ -1,6 +1,6 @@
 import "server-only";
 
-import { get, put } from "@vercel/blob";
+import { del, get, put } from "@vercel/blob";
 import type { GalleryItem } from "./site";
 
 /**
@@ -86,6 +86,23 @@ export async function addUploadedPhoto(
 
   await writeUploadedPhotos([entry, ...existing]);
   return entry;
+}
+
+/**
+ * Borra una foto subida: la quita del manifiesto y elimina el blob de la
+ * imagen. Se identifica por su `pathname` (lo que viaja en la URL del proxy).
+ * Devuelve true si la foto existía y se borró; false si no se encontró.
+ */
+export async function removeUploadedPhoto(pathname: string): Promise<boolean> {
+  const existing = await readUploadedPhotos();
+  const photo = existing.find((p) => p.pathname === pathname);
+  if (!photo) return false;
+
+  // Primero el blob de la imagen; si falla, no tocamos el manifiesto para no
+  // dejar una entrada apuntando a algo que ya no existe.
+  await del(photo.url);
+  await writeUploadedPhotos(existing.filter((p) => p.pathname !== pathname));
+  return true;
 }
 
 /**
