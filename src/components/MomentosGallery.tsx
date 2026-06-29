@@ -88,12 +88,6 @@ export function MomentosGallery({
     };
   }, []);
 
-  // Orden cronológico: primero las fotos de siempre y, al final, las subidas
-  // por la familia con la más reciente la última. La API las entrega con la
-  // más nueva primero (igual que el estado al añadir una), por eso las
-  // invertimos aquí para mostrarlas de la más antigua a la más nueva.
-  const items = [...staticItems, ...[...uploaded].reverse()];
-
   /** Borra una foto subida (pide la misma contraseña que para subirla). */
   async function handleDelete(item: GalleryItem) {
     const pathname = galleryUploadedPathname(item.src);
@@ -124,7 +118,7 @@ export function MomentosGallery({
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       <div className="flex justify-center">
         <button
           type="button"
@@ -136,7 +130,32 @@ export function MomentosGallery({
         </button>
       </div>
 
-      <PhotoGallery items={items} onDelete={handleDelete} />
+      {/* Fotos subidas por la familia: arriba y las más recientes primero,
+          para no tener que bajar hasta el final para ver lo nuevo. */}
+      {uploaded.length > 0 ? (
+        <section className="space-y-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 className="font-serif text-2xl text-[var(--ink)]">
+              Fotos de la familia
+            </h3>
+            <span className="text-sm text-[var(--muted)]">
+              {uploaded.length}{" "}
+              {uploaded.length === 1 ? "foto" : "fotos"} · las más nuevas primero
+            </span>
+          </div>
+          <PhotoGallery items={uploaded} onDelete={handleDelete} pageSize={6} />
+        </section>
+      ) : null}
+
+      {/* La galería de siempre, paginada con "Ver más". */}
+      {staticItems.length > 0 ? (
+        <section className="space-y-4">
+          <h3 className="font-serif text-2xl text-[var(--ink)]">
+            Nuestra galería
+          </h3>
+          <PhotoGallery items={staticItems} pageSize={6} />
+        </section>
+      ) : null}
 
       {open ? (
         <UploadModal
