@@ -12,3 +12,13 @@ export function gallerySrcIsVideo(src: string): boolean {
 export function gallerySrcUrl(src: string): string {
   return /^https?:\/\//i.test(src) ? src : encodeURI(src);
 }
+
+/**
+ * Indica si la foto es una subida de la familia, que servimos desde nuestro
+ * proxy dinámico /api/gallery/img (reenvía un blob privado). El optimizador
+ * de imágenes de Next no procesa bien esa respuesta en streaming —la foto
+ * sale rota—, así que estas se muestran con `unoptimized`.
+ */
+export function gallerySrcIsUploaded(src: string): boolean {
+  return src.startsWith("/api/gallery/img");
+}

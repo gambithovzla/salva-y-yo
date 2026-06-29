@@ -87,7 +87,11 @@ export function MomentosGallery({
     };
   }, []);
 
-  const items = [...uploaded, ...staticItems];
+  // Orden cronológico: primero las fotos de siempre y, al final, las subidas
+  // por la familia con la más reciente la última. La API las entrega con la
+  // más nueva primero (igual que el estado al añadir una), por eso las
+  // invertimos aquí para mostrarlas de la más antigua a la más nueva.
+  const items = [...staticItems, ...[...uploaded].reverse()];
 
   return (
     <div className="space-y-8">
