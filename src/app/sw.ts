@@ -47,3 +47,20 @@ const serwist = new Serwist({
 });
 
 serwist.addEventListeners();
+
+/**
+ * Al activarse este service worker, borra las cachés de runtime que pudieran
+ * tener respuestas viejas de la galería: una lista `/api/gallery` cacheada
+ * (que mostraba "fotos fantasma" que ya no existen en el servidor) y las
+ * imágenes que antes se cacheaban como estáticas. Así el usuario no tiene que
+ * limpiar nada a mano: al actualizarse el SW, la galería parte de cero limpia.
+ */
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    (async () => {
+      for (const name of ["apis", "static-image-assets"]) {
+        await caches.delete(name).catch(() => {});
+      }
+    })(),
+  );
+});
