@@ -6,7 +6,11 @@ import { ChevronLeft, ChevronRight, Heart, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { GalleryItem } from "@/lib/site";
-import { gallerySrcIsVideo, gallerySrcUrl } from "@/lib/gallery-media";
+import {
+  gallerySrcIsUploaded,
+  gallerySrcIsVideo,
+  gallerySrcUrl,
+} from "@/lib/gallery-media";
 
 type GalleryLightboxProps = {
   items: GalleryItem[];
@@ -172,6 +176,7 @@ export function GalleryLightbox({
                   className="object-contain"
                   sizes="100vw"
                   priority
+                  unoptimized={gallerySrcIsUploaded(item.src)}
                 />
               )}
             </div>

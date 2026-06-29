@@ -5,7 +5,11 @@ import { motion } from "framer-motion";
 import { Heart, ImageIcon, Play } from "lucide-react";
 import { useState } from "react";
 import type { GalleryItem } from "@/lib/site";
-import { gallerySrcIsVideo, gallerySrcUrl } from "@/lib/gallery-media";
+import {
+  gallerySrcIsUploaded,
+  gallerySrcIsVideo,
+  gallerySrcUrl,
+} from "@/lib/gallery-media";
 import { GalleryLightbox } from "./GalleryLightbox";
 
 export function PhotoGallery({ items }: { items: GalleryItem[] }) {
@@ -98,6 +102,7 @@ export function PhotoGallery({ items }: { items: GalleryItem[] }) {
                     className="object-cover transition duration-500 group-hover:scale-[1.02]"
                     sizes="(max-width: 640px) 100vw, 50vw"
                     priority={i < 2 && !gallerySrcIsVideo(item.src)}
+                    unoptimized={gallerySrcIsUploaded(item.src)}
                   />
                 )}
               </div>
