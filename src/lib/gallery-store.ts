@@ -1,6 +1,6 @@
 import "server-only";
 
-import { list, put } from "@vercel/blob";
+import { get, put } from "@vercel/blob";
 import type { GalleryItem } from "./site";
 
 /**
@@ -31,19 +31,17 @@ export type UploadedPhoto = {
 
 /** Lee el manifiesto. Devuelve [] si todavía no existe ninguna subida. */
 export async function readUploadedPhotos(): Promise<UploadedPhoto[]> {
-  const { blobs } = await list({ prefix: MANIFEST_PATHNAME, limit: 1 });
-  const manifest = blobs.find((b) => b.pathname === MANIFEST_PATHNAME);
-  if (!manifest) return [];
-
-  // Cache-busting + no-store: el manifiesto cambia con cada subida y no
-  // queremos servir una versión cacheada por el CDN de Blob.
-  const res = await fetch(`${manifest.url}?ts=${Date.now()}`, {
-    cache: "no-store",
+  // El store es privado, así que el manifiesto no se puede leer por su URL
+  // pública: lo pedimos con el token del servidor. useCache:false porque
+  // cambia con cada subida y no queremos una versión cacheada por el CDN.
+  const result = await get(MANIFEST_PATHNAME, {
+    access: "private",
+    useCache: false,
   });
-  if (!res.ok) return [];
+  if (!result || !result.stream) return [];
 
   try {
-    const data = (await res.json()) as unknown;
+    const data = (await new Response(result.stream).json()) as unknown;
     if (!Array.isArray(data)) return [];
     return data as UploadedPhoto[];
   } catch {
@@ -53,8 +51,11 @@ export async function readUploadedPhotos(): Promise<UploadedPhoto[]> {
 
 /** Sobrescribe el manifiesto completo. */
 async function writeUploadedPhotos(photos: UploadedPhoto[]): Promise<void> {
+  // El store está configurado como privado, así que el manifiesto también
+  // debe guardarse con access:"private" (intentar "public" da el error
+  // "Cannot use public access on a private store").
   await put(MANIFEST_PATHNAME, JSON.stringify(photos), {
-    access: "public",
+    access: "private",
     contentType: "application/json",
     addRandomSuffix: false,
     allowOverwrite: true,
