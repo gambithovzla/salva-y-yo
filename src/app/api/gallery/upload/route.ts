@@ -9,10 +9,20 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 // y se mantiene por debajo del límite de cuerpo de las funciones serverless.
 const MAX_BYTES = 4 * 1024 * 1024;
 
-function passwordIsValid(candidate: FormDataEntryValue | null): boolean {
-  const expected = process.env.GALLERY_UPLOAD_PASSWORD;
-  if (!expected) return false;
-  return typeof candidate === "string" && candidate === expected;
+type PasswordCheck = "ok" | "unconfigured" | "invalid";
+
+function checkPassword(candidate: FormDataEntryValue | null): PasswordCheck {
+  // Recortamos espacios a ambos lados antes de comparar. Al pegar la
+  // contraseña en la configuración del servidor (Vercel) es fácil que se
+  // cuele un salto de línea final, y en el móvil el teclado o el
+  // autocompletado pueden añadir un espacio. Sin este trim, una contraseña
+  // correcta se rechazaba como "incorrecta" por una diferencia invisible.
+  const expected = process.env.GALLERY_UPLOAD_PASSWORD?.trim();
+  if (!expected) return "unconfigured";
+  if (typeof candidate !== "string" || candidate.trim() !== expected) {
+    return "invalid";
+  }
+  return "ok";
 }
 
 function sanitizePathname(fileName: string, fallbackExt: string): string {
@@ -46,7 +56,17 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json({ error: "Solicitud inválida." }, { status: 400 });
   }
 
-  if (!passwordIsValid(form.get("password"))) {
+  const passwordCheck = checkPassword(form.get("password"));
+  if (passwordCheck === "unconfigured") {
+    // La variable GALLERY_UPLOAD_PASSWORD no está definida en el servidor:
+    // no es culpa de quien sube, así que lo decimos claramente en vez de
+    // mostrar "Contraseña incorrecta".
+    return NextResponse.json(
+      { error: "La subida de fotos aún no está configurada en el servidor." },
+      { status: 503 },
+    );
+  }
+  if (passwordCheck === "invalid") {
     return NextResponse.json(
       { error: "Contraseña incorrecta." },
       { status: 401 },
